@@ -1,4 +1,4 @@
-import { Phone, Mail, MapPin, Instagram } from "lucide-react";
+import { Mail, MapPin, Instagram } from "lucide-react";
 
 const Footer = () => (
   <footer className="bg-foreground text-primary-foreground/70 py-16 px-6">
