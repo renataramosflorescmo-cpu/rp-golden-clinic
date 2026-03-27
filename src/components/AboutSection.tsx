@@ -19,7 +19,7 @@ const AboutSection = () => {
             <div className="w-12 h-px bg-accent mb-8" />
 
             <p className="font-body text-muted-foreground leading-relaxed mb-4 font-light">
-              Médica CRM 160891, Especialista em Dermatologia em São Paulo, especializada em cuidados com a pele, tratamentos estéticos e dermatológicos, promovendo saúde e beleza com abordagens modernas e personalizadas.
+              Proprietária e fundadora da RP Golden Clinic. Médica CRM 160891, Especialista em Dermatologia em São Paulo, especializada em cuidados com a pele, tratamentos estéticos e dermatológicos, promovendo saúde e beleza com abordagens modernas e personalizadas.
             </p>
             <p className="font-body text-muted-foreground leading-relaxed mb-4 font-light">
               Formada pela Faculdade de Medicina de Maringá (2013). Pós-graduação em Dermatologia Clínica e Cirúrgica pelo Instituto Pele Saudável e Estética Avançada pela ISMD.
