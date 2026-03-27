@@ -2,7 +2,7 @@ import { Mail, Instagram } from "lucide-react";
 
 const Footer = () => (
   <footer className="bg-foreground text-primary-foreground/70 py-16 px-6">
-    <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-10">
+    <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10">
       <div>
         <h3 className="font-display text-2xl font-semibold text-primary-foreground tracking-wide mb-4">
           <span className="tracking-[0.2em] uppercase text-lg">Golden Clinic</span>
