@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Jost:wght@300;400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,45 +6,45 @@
 
 @layer base {
   :root {
-    --background: 20 33% 98%;
-    --foreground: 350 15% 18%;
+    /* Golden Clinic Brand: #E5C578 (bege) #C99C63 (dourado) */
+    --background: 38 50% 97%;
+    --foreground: 30 20% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 350 15% 18%;
+    --card: 38 40% 95%;
+    --card-foreground: 30 20% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 350 15% 18%;
+    --popover-foreground: 30 20% 15%;
 
-    --primary: 350 45% 55%;
+    --primary: 34 49% 59%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 350 30% 94%;
-    --secondary-foreground: 350 45% 40%;
+    --secondary: 42 40% 90%;
+    --secondary-foreground: 34 49% 40%;
 
-    --muted: 20 15% 93%;
-    --muted-foreground: 350 8% 50%;
+    --muted: 38 25% 92%;
+    --muted-foreground: 30 12% 48%;
 
-    --accent: 30 55% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 42 71% 68%;
+    --accent-foreground: 30 25% 12%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 20 20% 90%;
-    --input: 20 20% 90%;
-    --ring: 350 45% 55%;
+    --border: 38 30% 88%;
+    --input: 38 30% 88%;
+    --ring: 34 49% 59%;
 
     --radius: 0.75rem;
 
-    --rose: 350 45% 55%;
-    --rose-light: 350 40% 95%;
-    --rose-dark: 350 50% 40%;
-    --gold: 30 55% 50%;
-    --gold-light: 35 50% 94%;
-    --cream: 30 40% 97%;
+    --gold: 34 49% 59%;
+    --gold-light: 42 71% 68%;
+    --gold-dark: 30 45% 35%;
+    --nude: 38 40% 95%;
+    --cream: 38 50% 97%;
 
     --font-display: 'Cormorant Garamond', serif;
-    --font-body: 'DM Sans', sans-serif;
+    --font-body: 'Jost', sans-serif;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -71,17 +71,17 @@
 }
 
 @layer utilities {
-  .text-gradient-rose {
-    background: linear-gradient(135deg, hsl(350 45% 55%), hsl(350 50% 40%));
+  .text-gradient-gold {
+    background: linear-gradient(135deg, hsl(42 71% 68%), hsl(34 49% 59%));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  .bg-rose-gradient {
-    background: linear-gradient(135deg, hsl(350 45% 55%), hsl(350 50% 40%));
+  .bg-gold-gradient {
+    background: linear-gradient(135deg, hsl(34 49% 59%), hsl(30 45% 35%));
   }
-  .bg-cream {
-    background-color: hsl(var(--cream));
+  .bg-gold-gradient-light {
+    background: linear-gradient(135deg, hsl(42 71% 68%), hsl(34 49% 59%));
   }
   .section-padding {
     @apply px-6 py-20 md:px-12 lg:px-20 lg:py-28;
