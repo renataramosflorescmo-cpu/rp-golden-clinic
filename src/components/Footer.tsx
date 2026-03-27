@@ -15,7 +15,7 @@ const Footer = () => (
         <h4 className="font-body text-xs tracking-[0.2em] uppercase text-primary-foreground mb-4">Contato</h4>
         <ul className="space-y-3 font-body text-sm font-light">
           <li className="flex items-center gap-2"><Mail size={14} /> contato@drarobertacastro.com.br</li>
-          <li className="flex items-center gap-2"><Instagram size={14} /> @drarobertacastro</li>
+          <li><a href="https://www.instagram.com/drarobertacastrodermatologia?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary-foreground transition-colors"><Instagram size={14} /> @drarobertacastrodermatologia</a></li>
         </ul>
       </div>
     </div>
