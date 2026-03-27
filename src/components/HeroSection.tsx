@@ -19,8 +19,8 @@ const HeroSection = () => {
             height={1080}
             className="w-full h-full object-cover object-center"
           />
-          {/* Soft fade using light brand tones */}
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, hsl(38, 40%, 95%) 0%, hsl(38, 40%, 95% / 0.6) 30%, transparent 70%)' }} />
+          {/* Wide soft gradient for seamless blend */}
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, hsl(38, 40%, 95%) 0%, hsl(38, 40%, 95% / 0.95) 15%, hsl(38, 40%, 95% / 0.7) 35%, hsl(38, 40%, 95% / 0.3) 55%, hsl(38, 40%, 95% / 0.05) 75%, transparent 100%)' }} />
         </div>
       </div>
 
