@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import beautyImg from "@/assets/beauty-profile.jpg";
+import beautyImg from "@/assets/beauty-profile.png";
 
 const AboutSection = () => {
   return (
@@ -11,22 +11,6 @@ const AboutSection = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="relative"
-          >
-            <img
-              src={beautyImg}
-              alt="Beleza e cuidado com a pele"
-              loading="lazy"
-              className="w-full rounded-sm shadow-2xl"
-            />
-            <div className="absolute -bottom-4 -right-4 w-32 h-32 border-2 border-accent/30 rounded-sm" />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.2 }}
           >
             <p className="font-body text-xs tracking-[0.3em] uppercase text-primary mb-3">Sobre</p>
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-foreground mb-6 leading-tight">
@@ -59,6 +43,21 @@ const AboutSection = () => {
                 </div>
               ))}
             </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="relative flex justify-center"
+          >
+            <img
+              src={beautyImg}
+              alt="Dra Roberta Castro"
+              loading="lazy"
+              className="w-full max-w-md object-contain"
+            />
           </motion.div>
         </div>
       </div>
