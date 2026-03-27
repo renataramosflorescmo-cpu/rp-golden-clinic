@@ -70,7 +70,6 @@ const SchedulingSection = () => {
                 <h4 className="font-display text-xl font-semibold text-foreground mb-2">Contato</h4>
                 <div className="font-body text-sm text-muted-foreground font-light space-y-1">
                   <p>(11) 93211-0460</p>
-                  <p>(11) 95890-3864</p>
                 </div>
               </div>
             </div>
