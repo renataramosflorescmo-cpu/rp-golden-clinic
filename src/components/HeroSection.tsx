@@ -6,25 +6,32 @@ const WHATSAPP_URL = "https://wa.me/5511932110460?text=Ol%C3%A1%2C+Dra.+Roberta%
 const HeroSection = () => {
   return (
     <section id="inicio" className="relative min-h-screen flex items-center overflow-hidden pt-16">
+      {/* Background base */}
+      <div className="absolute inset-0 bg-foreground" />
+
+      {/* Image positioned to the right */}
       <div className="absolute inset-0">
-        <img
-          src={heroImg}
-          alt="RP Golden Clinic"
-          width={1920}
-          height={1080}
-          className="w-full h-full object-cover"
-          style={{ objectPosition: '85% 20%' }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-foreground/85 via-foreground/60 to-foreground/10" />
-        <div className="absolute inset-0 bg-gradient-to-b from-foreground/30 via-transparent to-foreground/30" />
+        <div className="absolute right-0 top-0 bottom-0 w-[55%] md:w-[50%] lg:w-[55%]">
+          <img
+            src={heroImg}
+            alt="RP Golden Clinic"
+            width={1920}
+            height={1080}
+            className="w-full h-full object-cover object-center"
+          />
+          {/* Gradient fade from left to blend with dark bg */}
+          <div className="absolute inset-0 bg-gradient-to-r from-foreground via-foreground/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-foreground/20 via-transparent to-foreground/20" />
+        </div>
       </div>
 
+      {/* Text content — constrained to left half */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-20 w-full">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="max-w-xl"
+          className="max-w-md lg:max-w-lg"
         >
           <motion.div
             initial={{ opacity: 0 }}
@@ -44,10 +51,10 @@ const HeroSection = () => {
             <span className="block italic font-light text-accent">Clinic</span>
           </h1>
 
-          <p className="font-body text-base font-light text-primary-foreground/70 mb-4 leading-relaxed max-w-md">
+          <p className="font-body text-base font-light text-primary-foreground/70 mb-4 leading-relaxed max-w-sm">
             Especialista em Dermatologia Clínica, Cirúrgica e Estética Avançada.
           </p>
-          <p className="font-body text-sm text-primary-foreground/50 mb-10 max-w-sm">
+          <p className="font-body text-sm text-primary-foreground/50 mb-10 max-w-xs">
             Autoestima, confiança e transformação através da ciência e do cuidado refinado com a pele.
           </p>
 
