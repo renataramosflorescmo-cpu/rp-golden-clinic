@@ -6,10 +6,8 @@ const WHATSAPP_URL = "https://wa.me/5511932110460?text=Ol%C3%A1%2C+Dra.+Roberta%
 const HeroSection = () => {
   return (
     <section id="inicio" className="relative min-h-screen flex items-center overflow-hidden pt-16">
-      {/* Background base — warm brand tone */}
-      <div className="absolute inset-0" style={{ background: 'hsl(30, 20%, 15%)' }}>
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, hsl(34, 49%, 25%) 0%, hsl(30, 20%, 15%) 60%, hsl(42, 30%, 20%) 100%)' }} />
-      </div>
+      {/* Background base — cream/nude from brandbook */}
+      <div className="absolute inset-0 bg-card" />
 
       {/* Image positioned to the right */}
       <div className="absolute inset-0">
@@ -21,9 +19,8 @@ const HeroSection = () => {
             height={1080}
             className="w-full h-full object-cover object-center"
           />
-          {/* Gradient fade using brand warm tones */}
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, hsl(34, 49%, 20%) 0%, hsl(34, 49%, 20% / 0.7) 30%, hsl(42, 40%, 30% / 0.15) 70%, transparent 100%)' }} />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, hsl(30, 20%, 15% / 0.2) 0%, transparent 40%, transparent 60%, hsl(30, 20%, 15% / 0.2) 100%)' }} />
+          {/* Soft fade using light brand tones */}
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, hsl(38, 40%, 95%) 0%, hsl(38, 40%, 95% / 0.6) 30%, transparent 70%)' }} />
         </div>
       </div>
 
@@ -41,22 +38,22 @@ const HeroSection = () => {
             transition={{ delay: 0.3, duration: 0.8 }}
             className="mb-8"
           >
-            <p className="font-body text-xs tracking-[0.3em] uppercase text-primary-foreground/60 mb-4">
+            <p className="font-body text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4">
               Dermatologia Estética Avançada
             </p>
             <div className="w-12 h-px bg-accent mb-6" />
           </motion.div>
 
-          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-light text-primary-foreground leading-[0.95] mb-6 tracking-tight">
+          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-light text-foreground leading-[0.95] mb-6 tracking-tight">
             RP
             <span className="block font-semibold">Golden</span>
-            <span className="block italic font-light text-accent">Clinic</span>
+            <span className="block italic font-light text-primary">Clinic</span>
           </h1>
 
-          <p className="font-body text-base font-light text-primary-foreground/70 mb-4 leading-relaxed max-w-sm">
+          <p className="font-body text-base font-light text-muted-foreground mb-4 leading-relaxed max-w-sm">
             Especialista em Dermatologia Clínica, Cirúrgica e Estética Avançada.
           </p>
-          <p className="font-body text-sm text-primary-foreground/50 mb-10 max-w-xs">
+          <p className="font-body text-sm text-muted-foreground/70 mb-10 max-w-xs">
             Autoestima, confiança e transformação através da ciência e do cuidado refinado com a pele.
           </p>
 
@@ -71,7 +68,7 @@ const HeroSection = () => {
             </a>
             <a
               href="#tratamentos"
-              className="border border-primary-foreground/20 text-primary-foreground px-8 py-4 rounded-sm text-xs font-medium tracking-[0.2em] uppercase hover:bg-primary-foreground/5 transition-colors text-center"
+              className="border border-foreground/20 text-foreground px-8 py-4 rounded-sm text-xs font-medium tracking-[0.2em] uppercase hover:bg-foreground/5 transition-colors text-center"
             >
               Tratamentos
             </a>
