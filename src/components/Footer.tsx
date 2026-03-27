@@ -1,8 +1,8 @@
-import { Mail, MapPin, Instagram } from "lucide-react";
+import { Mail, Instagram } from "lucide-react";
 
 const Footer = () => (
   <footer className="bg-foreground text-primary-foreground/70 py-16 px-6">
-    <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-10">
+    <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10">
       <div>
         <h3 className="font-display text-2xl font-semibold text-primary-foreground tracking-wide mb-4">
           <span className="tracking-[0.2em] uppercase text-lg">Golden Clinic</span>
@@ -16,14 +16,6 @@ const Footer = () => (
         <ul className="space-y-3 font-body text-sm font-light">
           <li className="flex items-center gap-2"><Mail size={14} /> contato@drarobertacastro.com.br</li>
           <li className="flex items-center gap-2"><Instagram size={14} /> @drarobertacastro</li>
-        </ul>
-      </div>
-      <div>
-        <h4 className="font-body text-xs tracking-[0.2em] uppercase text-primary-foreground mb-4">Unidades</h4>
-        <ul className="space-y-3 font-body text-sm font-light">
-          <li className="flex items-start gap-2"><MapPin size={14} className="mt-0.5 shrink-0" /> Vila Olímpia – São Paulo</li>
-          <li className="flex items-start gap-2"><MapPin size={14} className="mt-0.5 shrink-0" /> Moema – São Paulo</li>
-          <li className="flex items-start gap-2"><MapPin size={14} className="mt-0.5 shrink-0" /> Morumbi – São Paulo</li>
         </ul>
       </div>
     </div>
