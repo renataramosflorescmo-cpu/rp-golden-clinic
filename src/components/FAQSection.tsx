@@ -8,26 +8,26 @@ import {
 
 const faqs = [
   {
-    q: "Quais tratamentos estéticos a Dra. Roberta Castro oferece?",
-    a: "A Dra. Roberta oferece uma ampla gama de tratamentos estéticos, incluindo bioestimuladores de colágeno, preenchimentos com ácido hialurônico, toxina botulínica, remodelação glútea, peelings químicos e tratamentos a laser.",
+    q: "Quais tratamentos estéticos a Dra. Roberta oferece?",
+    a: "Bioestimuladores de colágeno, preenchimentos com ácido hialurônico, toxina botulínica, remodelação glútea, peelings químicos e tratamentos a laser.",
   },
   {
-    q: "Quais são as especialidades da Dra. Roberta na dermatologia estética?",
-    a: "Além de tratamentos antienvelhecimento, a Dra. Roberta é especializada em melhoria da saúde da pele, tratando condições como acne, rosácea e manchas hiperpigmentadas com as mais recentes tecnologias.",
+    q: "Quais são as especialidades na dermatologia estética?",
+    a: "Tratamentos antienvelhecimento, melhoria da saúde da pele, acne, rosácea e manchas hiperpigmentadas com as mais recentes tecnologias.",
   },
   {
     q: "Como funciona a abordagem de cuidados com a pele?",
-    a: "A Dra. Roberta adota uma abordagem holística, realizando uma avaliação detalhada da pele e criando um plano de tratamento personalizado, orientado para resultados duradouros e naturais.",
+    a: "Avaliação detalhada e plano personalizado orientado para resultados duradouros e naturais, respeitando as características únicas de cada paciente.",
   },
   {
-    q: "A primeira avaliação é gratuita?",
-    a: "Entre em contato pelo WhatsApp para verificar as condições de agendamento e valores de consulta. A equipe terá prazer em ajudá-la!",
+    q: "Como agendar uma consulta?",
+    a: "Entre em contato pelo WhatsApp (11) 93211-0460 ou preencha o formulário abaixo. Nossa equipe responderá rapidamente!",
   },
 ];
 
 const FAQSection = () => {
   return (
-    <section className="section-padding bg-background">
+    <section className="section-padding bg-card">
       <div className="max-w-3xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -36,19 +36,20 @@ const FAQSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <span className="text-primary font-semibold text-sm uppercase tracking-widest">Dúvidas</span>
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mt-3">
+          <p className="font-body text-xs tracking-[0.3em] uppercase text-primary mb-3">Dúvidas</p>
+          <h2 className="font-display text-4xl md:text-5xl font-semibold text-foreground">
             Perguntas Frequentes
           </h2>
+          <div className="w-12 h-px bg-accent mx-auto mt-5" />
         </motion.div>
 
         <Accordion type="single" collapsible className="space-y-3">
           {faqs.map((faq, i) => (
-            <AccordionItem key={i} value={`faq-${i}`} className="bg-card border border-border rounded-2xl px-6 overflow-hidden">
-              <AccordionTrigger className="font-display text-lg font-semibold text-foreground hover:no-underline py-5">
+            <AccordionItem key={i} value={`faq-${i}`} className="bg-background border border-border rounded-sm px-6 overflow-hidden">
+              <AccordionTrigger className="font-display text-lg font-medium text-foreground hover:no-underline py-5">
                 {faq.q}
               </AccordionTrigger>
-              <AccordionContent className="font-body text-muted-foreground pb-5">
+              <AccordionContent className="font-body text-muted-foreground font-light pb-5">
                 {faq.a}
               </AccordionContent>
             </AccordionItem>

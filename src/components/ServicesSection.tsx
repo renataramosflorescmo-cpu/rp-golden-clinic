@@ -7,32 +7,32 @@ const treatments = [
   {
     icon: Sparkles,
     title: "Bioestimuladores de Colágeno",
-    desc: "Produtos injetados no tecido subcutâneo que estimulam a produção natural de colágeno, restaurando a juventude da pele com resultados duradouros.",
+    desc: "Produtos injetados no tecido subcutâneo que estimulam a produção natural de colágeno com resultados duradouros.",
     whatsMsg: "Olá, Dra. Roberta! Gostaria de saber mais sobre Bioestimuladores de Colágeno.",
   },
   {
     icon: Syringe,
     title: "Preenchimento com Ácido Hialurônico",
-    desc: "Preenchimento com ácido hialurônico para contribuir na reestruturação facial, devolvendo volume e contorno de forma natural.",
-    whatsMsg: "Olá, Dra. Roberta! Gostaria de saber mais sobre Preenchimento com Ácido Hialurônico.",
+    desc: "Reestruturação facial devolvendo volume e contorno de forma natural e harmoniosa.",
+    whatsMsg: "Olá, Dra. Roberta! Gostaria de saber mais sobre Preenchimento.",
   },
   {
     icon: Pill,
     title: "Toxina Botulínica",
-    desc: "Aplicação em rosto, pescoço, axilas, palma das mãos e planta dos pés para tratamento de hiperidrose e rugas de expressão.",
+    desc: "Aplicação em rosto, pescoço e tratamento de hiperidrose em axilas, mãos e pés.",
     whatsMsg: "Olá, Dra. Roberta! Gostaria de saber mais sobre Toxina Botulínica.",
   },
   {
     icon: Scissors,
     title: "Remodelação Glútea",
-    desc: "Tratamento que melhora a textura e qualidade da pele, proporcionando um resultado mais firme e empinado de forma segura.",
+    desc: "Melhora da textura e qualidade da pele com resultado mais firme e natural.",
     whatsMsg: "Olá, Dra. Roberta! Gostaria de saber mais sobre Remodelação Glútea.",
   },
 ];
 
 const ServicesSection = () => {
   return (
-    <section id="tratamentos" className="section-padding bg-background">
+    <section id="tratamentos" className="section-padding bg-card">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -41,16 +41,17 @@ const ServicesSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="text-primary font-semibold text-sm uppercase tracking-widest">Tratamentos</span>
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mt-3">
-            Procedimentos com amor e dedicação
+          <p className="font-body text-xs tracking-[0.3em] uppercase text-primary mb-3">Tratamentos</p>
+          <h2 className="font-display text-4xl md:text-5xl font-semibold text-foreground">
+            Procedimentos
           </h2>
-          <p className="font-body text-muted-foreground mt-4 max-w-xl mx-auto">
-            Veja todos os procedimentos que trabalho para valorizar sua beleza natural.
+          <div className="w-12 h-px bg-accent mx-auto mt-5 mb-4" />
+          <p className="font-body text-muted-foreground font-light max-w-lg mx-auto">
+            Cada procedimento é realizado com amor, dedicação e tecnologia de ponta para valorizar sua beleza natural.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-8">
           {treatments.map((t, i) => (
             <motion.div
               key={t.title}
@@ -58,20 +59,20 @@ const ServicesSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group bg-card border border-border rounded-3xl p-8 hover:shadow-xl hover:border-primary/30 transition-all duration-300"
+              className="group bg-background border border-border rounded-sm p-10 hover:shadow-xl hover:border-primary/30 transition-all duration-500"
             >
-              <div className="w-14 h-14 rounded-2xl bg-secondary flex items-center justify-center mb-5 group-hover:bg-rose-gradient transition-colors">
-                <t.icon size={28} className="text-primary group-hover:text-primary-foreground transition-colors" />
+              <div className="w-14 h-14 rounded-sm bg-secondary flex items-center justify-center mb-6 group-hover:bg-gold-gradient transition-colors duration-500">
+                <t.icon size={26} className="text-primary group-hover:text-primary-foreground transition-colors duration-500" />
               </div>
               <h3 className="font-display text-2xl font-semibold text-foreground mb-3">{t.title}</h3>
-              <p className="font-body text-muted-foreground text-sm leading-relaxed mb-6">{t.desc}</p>
+              <p className="font-body text-muted-foreground text-sm font-light leading-relaxed mb-6">{t.desc}</p>
               <a
                 href={`${WHATSAPP_BASE}${encodeURIComponent(t.whatsMsg)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center text-primary font-semibold text-sm hover:underline"
+                className="inline-flex items-center gap-2 text-primary font-body text-xs tracking-[0.15em] uppercase font-medium hover:text-gold-dark transition-colors"
               >
-                Agendar →
+                Agendar <span>→</span>
               </a>
             </motion.div>
           ))}
