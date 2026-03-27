@@ -64,7 +64,7 @@ const AboutSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="relative z-20 -mt-14 bg-primary/90 px-8 py-3 rounded-sm"
+              className="absolute z-20 bottom-[18%] left-1/2 -translate-x-1/2 bg-primary/90 px-8 py-3 rounded-sm"
             >
               <p className="font-body text-xs tracking-[0.25em] uppercase text-primary-foreground text-center">
                 Fundadora da RP Golden Clinic
