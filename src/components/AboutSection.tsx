@@ -56,7 +56,15 @@ const AboutSection = () => {
               src={beautyImg}
               alt="Dra Roberta Castro"
               loading="lazy"
-              className="w-auto h-[500px] md:h-[600px] object-contain drop-shadow-lg"
+              className="relative z-10 w-auto h-[550px] md:h-[680px] object-contain drop-shadow-lg"
+            />
+            {/* Animated rectangle below arms */}
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[70%] h-[45%] border border-primary/30 rounded-sm origin-center z-0"
             />
           </motion.div>
         </div>
