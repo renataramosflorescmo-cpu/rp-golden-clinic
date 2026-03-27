@@ -5,7 +5,7 @@ const AboutSection = () => {
   return (
     <section id="sobre" className="section-padding bg-background">
       <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -50,7 +50,7 @@ const AboutSection = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="relative flex items-end justify-center"
+            className="relative flex flex-col items-center justify-end"
           >
             <img
               src={beautyImg}
@@ -58,14 +58,18 @@ const AboutSection = () => {
               loading="lazy"
               className="relative z-10 w-auto h-[550px] md:h-[680px] object-contain drop-shadow-lg"
             />
-            {/* Animated rectangle below arms */}
+            {/* Label below arms */}
             <motion.div
-              initial={{ scaleX: 0, opacity: 0 }}
-              whileInView={{ scaleX: 1, opacity: 1 }}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[70%] h-[45%] border border-primary/30 rounded-sm origin-center z-0"
-            />
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="relative z-20 -mt-4 bg-primary/90 px-8 py-3 rounded-sm"
+            >
+              <p className="font-body text-xs tracking-[0.25em] uppercase text-primary-foreground text-center">
+                Fundadora da RP Golden Clinic
+              </p>
+            </motion.div>
           </motion.div>
         </div>
       </div>
