@@ -1,4 +1,4 @@
-import { Mail, Instagram } from "lucide-react";
+import { Mail, Instagram, MapPin } from "lucide-react";
 
 const Footer = () => (
   <footer className="bg-foreground text-primary-foreground/70 py-16 px-6">
@@ -16,6 +16,7 @@ const Footer = () => (
         <ul className="space-y-3 font-body text-sm font-light">
           <li className="flex items-center gap-2"><Mail size={14} /> contato@drarobertacastro.com.br</li>
           <li><a href="https://www.instagram.com/drarobertacastrodermatologia?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary-foreground transition-colors"><Instagram size={14} /> @drarobertacastrodermatologia</a></li>
+          <li><a href="https://share.google/Xu72hrXSQAvgkFGBH" target="_blank" rel="noopener noreferrer" className="flex items-start gap-2 hover:text-primary-foreground transition-colors"><MapPin size={14} className="mt-0.5 shrink-0" /> Rua Luís Correia de Melo, 92 - Chácara Santo Antônio, São Paulo - SP, 04726-220</a></li>
         </ul>
       </div>
     </div>
