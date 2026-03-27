@@ -6,8 +6,10 @@ const WHATSAPP_URL = "https://wa.me/5511932110460?text=Ol%C3%A1%2C+Dra.+Roberta%
 const HeroSection = () => {
   return (
     <section id="inicio" className="relative min-h-screen flex items-center overflow-hidden pt-16">
-      {/* Background base */}
-      <div className="absolute inset-0 bg-foreground" />
+      {/* Background base — warm brand tone */}
+      <div className="absolute inset-0" style={{ background: 'hsl(30, 20%, 15%)' }}>
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, hsl(34, 49%, 25%) 0%, hsl(30, 20%, 15%) 60%, hsl(42, 30%, 20%) 100%)' }} />
+      </div>
 
       {/* Image positioned to the right */}
       <div className="absolute inset-0">
@@ -19,9 +21,9 @@ const HeroSection = () => {
             height={1080}
             className="w-full h-full object-cover object-center"
           />
-          {/* Gradient fade from left to blend with dark bg */}
-          <div className="absolute inset-0 bg-gradient-to-r from-foreground via-foreground/40 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-b from-foreground/20 via-transparent to-foreground/20" />
+          {/* Gradient fade using brand warm tones */}
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, hsl(34, 49%, 20%) 0%, hsl(34, 49%, 20% / 0.7) 30%, hsl(42, 40%, 30% / 0.15) 70%, transparent 100%)' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, hsl(30, 20%, 15% / 0.2) 0%, transparent 40%, transparent 60%, hsl(30, 20%, 15% / 0.2) 100%)' }} />
         </div>
       </div>
 
