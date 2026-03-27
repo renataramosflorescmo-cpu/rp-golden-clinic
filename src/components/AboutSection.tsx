@@ -50,16 +50,14 @@ const AboutSection = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="relative flex flex-col items-center justify-end"
+            className="relative flex items-end justify-center"
           >
             <img
               src={beautyImg}
               alt="Dra Roberta Castro"
               loading="lazy"
-              className="w-auto h-[550px] md:h-[660px] object-contain drop-shadow-lg"
+              className="w-auto h-[500px] md:h-[600px] object-contain drop-shadow-lg"
             />
-            <div className="w-40 h-1 bg-gold-gradient rounded-full mt-4" />
-            <div className="w-24 h-px bg-accent/50 mt-2" />
           </motion.div>
         </div>
       </div>
