@@ -7,8 +7,16 @@ const HeroSection = () => {
   return (
     <section id="inicio" className="relative min-h-screen flex items-center overflow-hidden pt-16">
       <div className="absolute inset-0">
-        <img src={heroImg} alt="RP Golden Clinic" width={1920} height={1080} className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-foreground/75 via-foreground/50 to-foreground/20" />
+        <img
+          src={heroImg}
+          alt="RP Golden Clinic"
+          width={1920}
+          height={1080}
+          className="w-full h-full object-cover object-top"
+          style={{ objectPosition: '70% 15%' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-foreground/80 via-foreground/55 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-foreground/30 via-transparent to-foreground/40" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-20 w-full">
