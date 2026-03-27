@@ -3,28 +3,28 @@ import { Star, Quote } from "lucide-react";
 
 const testimonials = [
   {
-    name: "Marina Costa",
-    role: "Paciente há 2 anos",
-    text: "Depois de anos com dores crônicas, finalmente encontrei uma equipe que realmente se importa. O tratamento mudou minha qualidade de vida completamente.",
+    name: "Camila Rodrigues",
+    role: "Paciente – Bioestimuladores",
+    text: "A Dra. Roberta é incrível! Fiz bioestimuladores de colágeno e o resultado ficou super natural. Minha pele nunca esteve tão bonita. Recomendo de olhos fechados!",
     stars: 5,
   },
   {
-    name: "Rafael Oliveira",
-    role: "Atleta profissional",
-    text: "A equipe multidisciplinar fez toda diferença na minha recuperação. Voltei a competir em tempo recorde e com total segurança.",
+    name: "Fernanda Lima",
+    role: "Paciente – Preenchimento",
+    text: "Procurei a Dra. Roberta para preenchimento facial e fiquei encantada com a delicadeza e profissionalismo. O resultado ficou harmonioso e natural, exatamente como eu queria.",
     stars: 5,
   },
   {
-    name: "Ana Beatriz Silva",
-    role: "Paciente há 1 ano",
-    text: "O acompanhamento nutricional aliado aos tratamentos transformou não só meu corpo, mas minha relação com a saúde. Recomendo de olhos fechados!",
+    name: "Juliana Santos",
+    role: "Paciente – Toxina Botulínica",
+    text: "Depois de anos com receio de aplicar botox, encontrei na Dra. Roberta a confiança que precisava. Resultado leve, sem exageros. Ela realmente entende de estética!",
     stars: 5,
   },
 ];
 
 const TestimonialsSection = () => {
   return (
-    <section id="depoimentos" className="section-padding bg-card">
+    <section id="depoimentos" className="section-padding bg-secondary">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -33,9 +33,9 @@ const TestimonialsSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="text-accent font-semibold text-sm uppercase tracking-widest">Prova Social</span>
+          <span className="text-primary font-semibold text-sm uppercase tracking-widest">Depoimentos</span>
           <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mt-3">
-            O que nossos pacientes dizem
+            O que nossas pacientes dizem
           </h2>
         </motion.div>
 
@@ -47,19 +47,19 @@ const TestimonialsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.15 }}
-              className="bg-background border border-border rounded-2xl p-8 relative"
+              className="bg-card border border-border rounded-3xl p-8 relative"
             >
               <Quote size={40} className="text-secondary absolute top-6 right-6" />
               <div className="flex gap-1 mb-4">
                 {Array.from({ length: t.stars }).map((_, j) => (
-                  <Star key={j} size={18} className="fill-accent text-accent" />
+                  <Star key={j} size={18} className="fill-primary text-primary" />
                 ))}
               </div>
               <p className="font-body text-foreground/80 leading-relaxed mb-6 italic">
                 "{t.text}"
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-full bg-hero-gradient flex items-center justify-center text-primary-foreground font-semibold text-sm">
+                <div className="w-11 h-11 rounded-full bg-rose-gradient flex items-center justify-center text-primary-foreground font-semibold text-sm">
                   {t.name.split(" ").map((n) => n[0]).join("")}
                 </div>
                 <div>

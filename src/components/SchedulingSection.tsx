@@ -1,21 +1,21 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Calendar, Clock, User, Mail, Phone, MessageSquare } from "lucide-react";
+import { User, Mail, Phone, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 
-const timeSlots = ["08:00", "09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"];
-const serviceOptions = ["Avaliação Completa", "Cardiologia", "Neurologia", "Fisioterapia", "Nutrição Funcional", "Estética Avançada"];
+const WHATSAPP_URL = "https://wa.me/5511932110460";
+
+const serviceOptions = [
+  "Bioestimuladores de Colágeno",
+  "Preenchimento com Ácido Hialurônico",
+  "Toxina Botulínica",
+  "Remodelação Glútea",
+  "Avaliação Dermatológica",
+  "Outro",
+];
 
 const SchedulingSection = () => {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    service: "",
-    date: "",
-    time: "",
-    message: "",
-  });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", service: "", message: "" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -23,135 +23,90 @@ const SchedulingSection = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.phone || !form.service || !form.date || !form.time) {
+    if (!form.name || !form.phone || !form.service) {
       toast.error("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
-    toast.success("Agendamento solicitado com sucesso! Entraremos em contato em breve.");
-    setForm({ name: "", email: "", phone: "", service: "", date: "", time: "", message: "" });
+    const msg = `Olá, Dra. Roberta! Meu nome é ${form.name}. Gostaria de agendar: ${form.service}. ${form.message ? "Obs: " + form.message : ""}`;
+    window.open(`${WHATSAPP_URL}?text=${encodeURIComponent(msg)}`, "_blank");
+    toast.success("Redirecionando para o WhatsApp...");
   };
 
   const inputClass =
-    "w-full bg-background border border-border rounded-lg px-4 py-3 font-body text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition";
+    "w-full bg-background border border-border rounded-xl px-4 py-3.5 font-body text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition";
 
   return (
-    <section id="agendamento" className="section-padding bg-background">
-      <div className="max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <span className="text-accent font-semibold text-sm uppercase tracking-widest">Agendamento Online</span>
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mt-3">
-            Agende sua avaliação
-          </h2>
-          <p className="font-body text-muted-foreground mt-4 max-w-xl mx-auto">
-            Escolha o melhor horário e nós cuidamos do resto. Primeira avaliação gratuita!
-          </p>
-        </motion.div>
-
-        <motion.form
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          onSubmit={handleSubmit}
-          className="bg-card border border-border rounded-2xl p-8 md:p-10 space-y-6"
-        >
-          <div className="grid md:grid-cols-2 gap-5">
-            <div className="relative">
-              <User size={18} className="absolute left-4 top-3.5 text-muted-foreground" />
-              <input
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                placeholder="Nome completo *"
-                className={`${inputClass} pl-11`}
-              />
-            </div>
-            <div className="relative">
-              <Phone size={18} className="absolute left-4 top-3.5 text-muted-foreground" />
-              <input
-                name="phone"
-                value={form.phone}
-                onChange={handleChange}
-                placeholder="Telefone / WhatsApp *"
-                className={`${inputClass} pl-11`}
-              />
-            </div>
-          </div>
-
-          <div className="relative">
-            <Mail size={18} className="absolute left-4 top-3.5 text-muted-foreground" />
-            <input
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              type="email"
-              placeholder="E-mail (opcional)"
-              className={`${inputClass} pl-11`}
-            />
-          </div>
-
-          <select
-            name="service"
-            value={form.service}
-            onChange={handleChange}
-            className={inputClass}
+    <section id="contato" className="section-padding bg-card">
+      <div className="max-w-5xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
           >
-            <option value="">Selecione o serviço *</option>
-            {serviceOptions.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
+            <span className="text-primary font-semibold text-sm uppercase tracking-widest">Agendamento</span>
+            <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mt-3 mb-4">
+              Agende sua consulta
+            </h2>
+            <p className="font-body text-muted-foreground mb-8 leading-relaxed">
+              Preencha o formulário e você será redirecionada ao WhatsApp para confirmar o agendamento diretamente com a equipe.
+            </p>
 
-          <div className="grid md:grid-cols-2 gap-5">
-            <div className="relative">
-              <Calendar size={18} className="absolute left-4 top-3.5 text-muted-foreground" />
-              <input
-                name="date"
-                value={form.date}
-                onChange={handleChange}
-                type="date"
-                className={`${inputClass} pl-11`}
-              />
+            <div className="space-y-5">
+              <div>
+                <h4 className="font-display text-xl font-semibold text-foreground mb-2">Localização</h4>
+                <div className="font-body text-sm text-muted-foreground space-y-1">
+                  <p>Rua Fidêncio Ramos, 100 – Vila Olímpia</p>
+                  <p>Rua Min. Gabriel de Resende Passos, 500 – Moema</p>
+                  <p>Av. Dr. Chucri Zaidan, 940 – Morumbi</p>
+                </div>
+              </div>
+              <div>
+                <h4 className="font-display text-xl font-semibold text-foreground mb-2">Contato</h4>
+                <div className="font-body text-sm text-muted-foreground space-y-1">
+                  <p>(11) 93211-0460</p>
+                  <p>(11) 95890-3864</p>
+                </div>
+              </div>
             </div>
-            <div className="relative">
-              <Clock size={18} className="absolute left-4 top-3.5 text-muted-foreground" />
-              <select name="time" value={form.time} onChange={handleChange} className={`${inputClass} pl-11`}>
-                <option value="">Horário *</option>
-                {timeSlots.map((t) => (
-                  <option key={t} value={t}>{t}</option>
-                ))}
-              </select>
-            </div>
-          </div>
+          </motion.div>
 
-          <div className="relative">
-            <MessageSquare size={18} className="absolute left-4 top-3.5 text-muted-foreground" />
-            <textarea
-              name="message"
-              value={form.message}
-              onChange={handleChange}
-              placeholder="Mensagem adicional (opcional)"
-              rows={3}
-              className={`${inputClass} pl-11 resize-none`}
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-primary text-primary-foreground py-4 rounded-lg font-semibold text-base hover:opacity-90 transition-opacity"
+          <motion.form
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            onSubmit={handleSubmit}
+            className="bg-background border border-border rounded-3xl p-8 space-y-5 shadow-lg"
           >
-            Confirmar Agendamento
-          </button>
-          <p className="text-center text-xs text-muted-foreground">
-            Ao agendar, você concorda com nossa política de privacidade.
-          </p>
-        </motion.form>
+            <div className="relative">
+              <User size={18} className="absolute left-4 top-4 text-muted-foreground" />
+              <input name="name" value={form.name} onChange={handleChange} placeholder="Nome completo *" className={`${inputClass} pl-11`} />
+            </div>
+            <div className="relative">
+              <Phone size={18} className="absolute left-4 top-4 text-muted-foreground" />
+              <input name="phone" value={form.phone} onChange={handleChange} placeholder="WhatsApp *" className={`${inputClass} pl-11`} />
+            </div>
+            <div className="relative">
+              <Mail size={18} className="absolute left-4 top-4 text-muted-foreground" />
+              <input name="email" value={form.email} onChange={handleChange} type="email" placeholder="E-mail (opcional)" className={`${inputClass} pl-11`} />
+            </div>
+            <select name="service" value={form.service} onChange={handleChange} className={inputClass}>
+              <option value="">Selecione o tratamento *</option>
+              {serviceOptions.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+            <div className="relative">
+              <MessageSquare size={18} className="absolute left-4 top-4 text-muted-foreground" />
+              <textarea name="message" value={form.message} onChange={handleChange} placeholder="Mensagem (opcional)" rows={3} className={`${inputClass} pl-11 resize-none`} />
+            </div>
+            <button type="submit" className="w-full bg-rose-gradient text-primary-foreground py-4 rounded-xl font-semibold text-base hover:opacity-90 transition-opacity shadow-md">
+              Agendar via WhatsApp
+            </button>
+          </motion.form>
+        </div>
       </div>
     </section>
   );
