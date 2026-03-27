@@ -1,4 +1,4 @@
-import { Phone, Mail, MapPin, Instagram } from "lucide-react";
+import { Mail, MapPin, Instagram } from "lucide-react";
 
 const Footer = () => (
   <footer className="bg-foreground text-primary-foreground/70 py-16 px-6">
@@ -14,8 +14,6 @@ const Footer = () => (
       <div>
         <h4 className="font-body text-xs tracking-[0.2em] uppercase text-primary-foreground mb-4">Contato</h4>
         <ul className="space-y-3 font-body text-sm font-light">
-          <li className="flex items-center gap-2"><Phone size={14} /> (11) 93211-0460</li>
-          <li className="flex items-center gap-2"><Phone size={14} /> (11) 95890-3864</li>
           <li className="flex items-center gap-2"><Mail size={14} /> contato@drarobertacastro.com.br</li>
           <li className="flex items-center gap-2"><Instagram size={14} /> @drarobertacastro</li>
         </ul>

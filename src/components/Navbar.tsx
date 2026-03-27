@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
@@ -35,10 +35,7 @@ const Navbar = () => {
           ))}
         </ul>
 
-        <div className="hidden lg:flex items-center gap-5">
-          <a href="tel:11932110460" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
-            <Phone size={15} /> (11) 93211-0460
-          </a>
+        <div className="hidden lg:flex items-center">
           <a
             href={WHATSAPP_URL}
             target="_blank"
