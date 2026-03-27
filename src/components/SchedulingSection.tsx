@@ -57,23 +57,6 @@ const SchedulingSection = () => {
 
             <img src={treatmentImg} alt="Tratamento estético" loading="lazy" className="rounded-sm mb-8 w-full shadow-lg" />
 
-            <div className="space-y-5">
-              <div>
-                <h4 className="font-display text-xl font-semibold text-foreground mb-2">Unidades</h4>
-                <div className="font-body text-sm text-muted-foreground font-light space-y-1">
-                  <p>Rua Fidêncio Ramos, 100 – Vila Olímpia</p>
-                  <p>Rua Min. Gabriel de Resende Passos, 500 – Moema</p>
-                  <p>Av. Dr. Chucri Zaidan, 940 – Morumbi</p>
-                </div>
-              </div>
-              <div>
-                <h4 className="font-display text-xl font-semibold text-foreground mb-2">Contato</h4>
-                <div className="font-body text-sm text-muted-foreground font-light space-y-1">
-                  <p>(11) 93211-0460</p>
-                  <p>(11) 95890-3864</p>
-                </div>
-              </div>
-            </div>
           </motion.div>
 
           <motion.form
