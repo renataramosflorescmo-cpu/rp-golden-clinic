@@ -18,14 +18,6 @@ const Footer = () => (
           <li className="flex items-center gap-2"><Instagram size={14} /> @drarobertacastro</li>
         </ul>
       </div>
-      <div>
-        <h4 className="font-body text-xs tracking-[0.2em] uppercase text-primary-foreground mb-4">Unidades</h4>
-        <ul className="space-y-3 font-body text-sm font-light">
-          <li className="flex items-start gap-2"><MapPin size={14} className="mt-0.5 shrink-0" /> Vila Olímpia – São Paulo</li>
-          <li className="flex items-start gap-2"><MapPin size={14} className="mt-0.5 shrink-0" /> Moema – São Paulo</li>
-          <li className="flex items-start gap-2"><MapPin size={14} className="mt-0.5 shrink-0" /> Morumbi – São Paulo</li>
-        </ul>
-      </div>
     </div>
     <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-primary-foreground/10 text-center font-body text-xs text-primary-foreground/40 tracking-wider">
       © 2026 RP Golden Clinic. Todos os direitos reservados.
