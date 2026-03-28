@@ -8,7 +8,7 @@ const navLinks = [
   { label: "Sobre", href: "#sobre" },
   { label: "Tratamentos", href: "#tratamentos" },
   { label: "Resultados", href: "#resultados" },
-  { label: "Depoimentos", href: "#depoimentos" },
+  { label: "Depoimentos", href: "/#depoimentos" },
   { label: "Contato", href: "/contato" },
 ];
 
@@ -47,7 +47,7 @@ const Navbar = () => {
         <ul className="hidden lg:flex items-center gap-8">
           {navLinks.map((l) => (
             <li key={l.href}>
-              {l.href.startsWith("/") ? (
+              {l.href.startsWith("/") && !l.href.includes("#") ? (
                 <Link to={l.href} className="font-body text-sm font-light tracking-wide text-foreground/60 hover:text-primary transition-colors uppercase">
                   {l.label}
                 </Link>
@@ -121,7 +121,7 @@ const Navbar = () => {
             <ul className="flex flex-col gap-4 px-6 py-6">
               {navLinks.map((l) => (
                 <li key={l.href}>
-                  {l.href.startsWith("/") ? (
+                  {l.href.startsWith("/") && !l.href.includes("#") ? (
                     <Link to={l.href} onClick={() => setOpen(false)} className="font-body text-sm tracking-wide uppercase text-foreground/70 hover:text-primary">
                       {l.label}
                     </Link>
