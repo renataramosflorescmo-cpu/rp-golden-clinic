@@ -94,7 +94,13 @@ const Navbar = () => {
           </li>
         </ul>
 
-        <div className="hidden lg:flex items-center">
+        <div className="hidden lg:flex items-center gap-3">
+          <a
+            href="#golden-friends"
+            className="border border-primary text-primary px-6 py-2.5 rounded-sm text-xs font-medium tracking-[0.15em] uppercase hover:bg-primary hover:text-primary-foreground transition-colors"
+          >
+            Golden Friends
+          </a>
           <a
             href={WHATSAPP_URL}
             target="_blank"
@@ -164,6 +170,12 @@ const Navbar = () => {
                     </motion.ul>
                   )}
                 </AnimatePresence>
+              </li>
+              <li>
+                <a href="#golden-friends" onClick={() => setOpen(false)}
+                  className="inline-flex border border-primary text-primary px-6 py-2.5 rounded-sm text-xs font-medium tracking-[0.15em] uppercase">
+                  Golden Friends
+                </a>
               </li>
               <li>
                 <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}
