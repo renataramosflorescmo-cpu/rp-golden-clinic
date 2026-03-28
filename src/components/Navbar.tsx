@@ -94,7 +94,13 @@ const Navbar = () => {
           </li>
         </ul>
 
-        <div className="hidden lg:flex items-center">
+        <div className="hidden lg:flex items-center gap-3">
+          <a
+            href="#golden-friends"
+            className="border border-primary text-primary px-6 py-2.5 rounded-sm text-xs font-medium tracking-[0.15em] uppercase hover:bg-primary hover:text-primary-foreground transition-colors"
+          >
+            Golden Friends
+          </a>
           <a
             href={WHATSAPP_URL}
             target="_blank"
