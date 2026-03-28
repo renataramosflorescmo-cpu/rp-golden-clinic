@@ -11,6 +11,7 @@ import Resultados from "./pages/Resultados.tsx";
 import ToxinaBotulinica from "./pages/ToxinaBotulinica.tsx";
 import BioestimuladorColageno from "./pages/BioestimuladorColageno.tsx";
 import EnzimasLipoliticas from "./pages/EnzimasLipoliticas.tsx";
+import PreenchimentoAcidoHialuronico from "./pages/PreenchimentoAcidoHialuronico.tsx";
 
 const queryClient = new QueryClient();
 
