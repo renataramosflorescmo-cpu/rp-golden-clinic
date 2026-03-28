@@ -8,7 +8,7 @@ const navLinks = [
   { label: "Tratamentos", href: "#tratamentos" },
   { label: "Resultados", href: "#resultados" },
   { label: "Depoimentos", href: "#depoimentos" },
-  { label: "Contato", href: "#contato" },
+  { label: "Contato", href: "/contato" },
 ];
 
 const unidades = [
