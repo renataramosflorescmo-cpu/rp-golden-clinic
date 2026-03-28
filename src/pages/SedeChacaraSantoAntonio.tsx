@@ -17,6 +17,12 @@ const clinicImages = [
   { url: clinicHallway, alt: "Corredor da clínica" },
 ];
 
+const GOOGLE_MAPS_URL =
+  "https://www.google.com/maps?sca_esv=18487c6ae7c08b5b&hl=en-BR&gl=br&sxsrf=ANbL-n6m-5THicZmCPqPRSW7hwXnXAPJ4Q:1774647791134&kgmid=/g/11t85qb5cy&shem=epsdc&shndl=30&kgs=4cc9190556c49a76&um=1&ie=UTF-8&fb=1&sa=X&geocode=KeFn3Yd3V86UMd9rYWapS8Xs&daddr=Rua+Lu%C3%ADs+Correia+de+Melo,+92+-+Ch%C3%A1cara+Santo+Ant%C3%B4nio,+S%C3%A3o+Paulo+-+SP,+04726-220";
+
+const WHATSAPP_URL =
+  "https://wa.me/5511932110460?text=Ol%C3%A1%2C+Dra.+Roberta%21+Gostaria+de+agendar+uma+consulta.+Vi+seu+perfil+no+site+e+me+interessei+muito.+Pode+me+ajudar%3F";
+
 const schedule = [
   { day: "Segunda-feira", hours: "09:00 – 19:00" },
   { day: "Terça-feira", hours: "09:00 – 19:00" },
