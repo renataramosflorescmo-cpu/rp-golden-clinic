@@ -77,9 +77,10 @@ const treatmentsByCategory: Record<Category, { icon: any; title: string; desc: s
     },
     {
       icon: Syringe,
-      title: "Enzimas Corporais",
+      title: "Enzimas Lipolíticas",
       desc: "Tratamento injetável para redução de gordura localizada e melhora do contorno corporal.",
-      whatsMsg: "Olá, Dra. Roberta! Gostaria de saber mais sobre Enzimas Corporais.",
+      whatsMsg: "Olá, Dra. Roberta! Gostaria de saber mais sobre Enzimas Lipolíticas.",
+      slug: "/tratamentos/enzimas-lipoliticas",
     },
   ],
 };
