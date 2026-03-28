@@ -12,7 +12,7 @@ const navLinks = [
 ];
 
 const unidades = [
-  { label: "Sede - Chácara Santo Antônio", href: "https://share.google/Xu72hrXSQAvgkFGBH" },
+  { label: "Sede - Chácara Santo Antônio", href: "/sede-chacara-santo-antonio" },
   { label: "Unidades credenciadas", href: "#contato" },
 ];
 
