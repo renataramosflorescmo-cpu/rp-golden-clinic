@@ -27,6 +27,7 @@ const treatmentsByCategory: Record<Category, { icon: any; title: string; desc: s
       title: "Preenchimento com Ácido Hialurônico",
       desc: "Reestruturação facial devolvendo volume e contorno de forma natural e harmoniosa.",
       whatsMsg: "Olá, Dra. Roberta! Gostaria de saber mais sobre Preenchimento.",
+      slug: "/tratamentos/preenchimento-acido-hialuronico",
     },
     {
       icon: Pill,
