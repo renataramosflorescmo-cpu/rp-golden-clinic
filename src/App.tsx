@@ -10,6 +10,7 @@ import Contato from "./pages/Contato.tsx";
 import Resultados from "./pages/Resultados.tsx";
 import ToxinaBotulinica from "./pages/ToxinaBotulinica.tsx";
 import BioestimuladorColageno from "./pages/BioestimuladorColageno.tsx";
+import EnzimasLipoliticas from "./pages/EnzimasLipoliticas.tsx";
 
 const queryClient = new QueryClient();
 
