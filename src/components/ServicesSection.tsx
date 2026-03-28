@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Sparkles, Syringe, Pill, Scissors, Droplets, Leaf, HeartPulse, Zap } from "lucide-react";
 
 const WHATSAPP_BASE = "https://wa.me/5511932110460?text=";
@@ -12,7 +13,7 @@ const categories: { key: Category; label: string }[] = [
   { key: "corporal", label: "Corporal" },
 ];
 
-const treatmentsByCategory: Record<Category, { icon: any; title: string; desc: string; whatsMsg: string }[]> = {
+const treatmentsByCategory: Record<Category, { icon: any; title: string; desc: string; whatsMsg: string; slug?: string }[]> = {
   facial: [
     {
       icon: Sparkles,
@@ -31,6 +32,7 @@ const treatmentsByCategory: Record<Category, { icon: any; title: string; desc: s
       title: "Toxina Botulínica",
       desc: "Aplicação em rosto, pescoço e tratamento de hiperidrose em axilas, mãos e pés.",
       whatsMsg: "Olá, Dra. Roberta! Gostaria de saber mais sobre Toxina Botulínica.",
+      slug: "/tratamentos/toxina-botulinica",
     },
     {
       icon: Droplets,
@@ -145,14 +147,24 @@ const ServicesSection = () => {
                 </div>
                 <h3 className="font-display text-2xl font-semibold text-foreground mb-3">{t.title}</h3>
                 <p className="font-body text-muted-foreground text-sm font-light leading-relaxed mb-6">{t.desc}</p>
-                <a
-                  href={`${WHATSAPP_BASE}${encodeURIComponent(t.whatsMsg)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-primary font-body text-xs tracking-[0.15em] uppercase font-medium hover:text-gold-dark transition-colors"
-                >
-                  Agendar <span>→</span>
-                </a>
+                <div className="flex items-center gap-6">
+                  <a
+                    href={`${WHATSAPP_BASE}${encodeURIComponent(t.whatsMsg)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-primary font-body text-xs tracking-[0.15em] uppercase font-medium hover:text-gold-dark transition-colors"
+                  >
+                    Agendar <span>→</span>
+                  </a>
+                  {t.slug && (
+                    <Link
+                      to={t.slug}
+                      className="inline-flex items-center gap-2 text-foreground/40 font-body text-xs tracking-[0.15em] uppercase font-medium hover:text-primary transition-colors"
+                    >
+                      Saiba mais <span>→</span>
+                    </Link>
+                  )}
+                </div>
               </motion.div>
             ))}
           </motion.div>
