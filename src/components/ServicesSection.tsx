@@ -38,9 +38,10 @@ const treatmentsByCategory: Record<Category, { icon: any; title: string; desc: s
     },
     {
       icon: Droplets,
-      title: "Skinbooster",
-      desc: "Hidratação profunda da pele com microinjeções de ácido hialurônico para luminosidade e viço.",
-      whatsMsg: "Olá, Dra. Roberta! Gostaria de saber mais sobre Skinbooster.",
+      title: "Profhilo",
+      desc: "Biorremodelador tecidual revolucionário que promove hidratação profunda, melhorando textura e firmeza da pele.",
+      whatsMsg: "Olá, Dra. Roberta! Gostaria de saber mais sobre Profhilo.",
+      slug: "/tratamentos/profhilo",
     },
   ],
   capilar: [
