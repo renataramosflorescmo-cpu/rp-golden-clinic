@@ -13,7 +13,7 @@ const categories: { key: Category; label: string }[] = [
   { key: "corporal", label: "Corporal" },
 ];
 
-const treatmentsByCategory: Record<Category, { icon: any; title: string; desc: string; whatsMsg: string }[]> = {
+const treatmentsByCategory: Record<Category, { icon: any; title: string; desc: string; whatsMsg: string; slug?: string }[]> = {
   facial: [
     {
       icon: Sparkles,
