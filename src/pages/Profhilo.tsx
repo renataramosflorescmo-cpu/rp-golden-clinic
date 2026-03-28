@@ -5,7 +5,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
 import profhiloHero from "@/assets/profhilo-hero.jpg";
-import profhiloPontos from "@/assets/profhilo-pontos.png";
 
 const WHATSAPP_URL =
   "https://wa.me/5511932110460?text=Ol%C3%A1%2C+Dra.+Roberta%21+Gostaria+de+saber+mais+sobre+Profhilo.";
@@ -203,39 +202,7 @@ const Profhilo = () => {
         </div>
       </section>
 
-      {/* Pontos de Aplicação */}
-      <section className="bg-muted/40">
-        <div className="max-w-5xl mx-auto px-6 py-16">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-10"
-          >
-            <p className="font-body text-xs tracking-[0.3em] uppercase text-primary mb-3">Pontos de Aplicação</p>
-            <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground">
-              Técnica BAP (Bio Aesthetic Points)
-            </h2>
-            <div className="w-12 h-px bg-accent mx-auto mt-5" />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.97 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="flex justify-center"
-          >
-            <img
-              src={profhiloPontos}
-              alt="Pontos de aplicação do Profhilo no rosto"
-              loading="lazy"
-              className="w-full max-w-3xl rounded-sm"
-            />
-          </motion.div>
-        </div>
-      </section>
-
+      {/* FAQ */}
       <section className="py-20 px-6">
         <div className="max-w-3xl mx-auto">
           <motion.div
