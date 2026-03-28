@@ -43,6 +43,13 @@ const treatmentsByCategory: Record<Category, { icon: any; title: string; desc: s
       whatsMsg: "Olá, Dra. Roberta! Gostaria de saber mais sobre Profhilo.",
       slug: "/tratamentos/profhilo",
     },
+    {
+      icon: HeartPulse,
+      title: "PDRN (Polinucleotídeos)",
+      desc: "Tratamento avançado que regenera a pele, estimula colágeno e clareia manchas, promovendo luminosidade e rejuvenescimento.",
+      whatsMsg: "Olá, Dra. Roberta! Gostaria de saber mais sobre o tratamento com PDRN.",
+      slug: "/tratamentos/pdrn",
+    },
   ],
   capilar: [
     {
