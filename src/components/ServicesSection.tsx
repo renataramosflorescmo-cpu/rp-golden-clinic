@@ -32,6 +32,7 @@ const treatmentsByCategory: Record<Category, { icon: any; title: string; desc: s
       title: "Toxina Botulínica",
       desc: "Aplicação em rosto, pescoço e tratamento de hiperidrose em axilas, mãos e pés.",
       whatsMsg: "Olá, Dra. Roberta! Gostaria de saber mais sobre Toxina Botulínica.",
+      slug: "/tratamentos/toxina-botulinica",
     },
     {
       icon: Droplets,
