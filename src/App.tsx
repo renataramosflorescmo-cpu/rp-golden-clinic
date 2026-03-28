@@ -33,6 +33,7 @@ const App = () => (
           <Route path="/tratamentos/enzimas-lipoliticas" element={<EnzimasLipoliticas />} />
           <Route path="/tratamentos/preenchimento-acido-hialuronico" element={<PreenchimentoAcidoHialuronico />} />
           <Route path="/tratamentos/profhilo" element={<Profhilo />} />
+          <Route path="/tratamentos/pdrn" element={<PDRNPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
