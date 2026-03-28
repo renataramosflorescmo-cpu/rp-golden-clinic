@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Sparkles, Syringe, Pill, Scissors, Droplets, Leaf, HeartPulse, Zap } from "lucide-react";
 
 const WHATSAPP_BASE = "https://wa.me/5511932110460?text=";
