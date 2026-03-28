@@ -9,6 +9,7 @@ import SedeChacaraSantoAntonio from "./pages/SedeChacaraSantoAntonio.tsx";
 import Contato from "./pages/Contato.tsx";
 import Resultados from "./pages/Resultados.tsx";
 import ToxinaBotulinica from "./pages/ToxinaBotulinica.tsx";
+import BioestimuladorColageno from "./pages/BioestimuladorColageno.tsx";
 
 const queryClient = new QueryClient();
 
