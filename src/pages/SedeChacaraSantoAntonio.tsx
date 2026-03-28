@@ -5,30 +5,23 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
 
+import clinicReception from "@/assets/clinic-reception.jpg";
+import clinicInterior from "@/assets/clinic-interior-2.jpg";
+import clinicWaiting from "@/assets/clinic-waiting.jpg";
+import clinicHallway from "@/assets/clinic-hallway.jpg";
+
+const clinicImages = [
+  { url: clinicReception, alt: "Recepção da clínica" },
+  { url: clinicInterior, alt: "Sala de procedimentos" },
+  { url: clinicWaiting, alt: "Sala de espera" },
+  { url: clinicHallway, alt: "Corredor da clínica" },
+];
+
 const GOOGLE_MAPS_URL =
   "https://www.google.com/maps?sca_esv=18487c6ae7c08b5b&hl=en-BR&gl=br&sxsrf=ANbL-n6m-5THicZmCPqPRSW7hwXnXAPJ4Q:1774647791134&kgmid=/g/11t85qb5cy&shem=epsdc&shndl=30&kgs=4cc9190556c49a76&um=1&ie=UTF-8&fb=1&sa=X&geocode=KeFn3Yd3V86UMd9rYWapS8Xs&daddr=Rua+Lu%C3%ADs+Correia+de+Melo,+92+-+Ch%C3%A1cara+Santo+Ant%C3%B4nio,+S%C3%A3o+Paulo+-+SP,+04726-220";
 
 const WHATSAPP_URL =
   "https://wa.me/5511932110460?text=Ol%C3%A1%2C+Dra.+Roberta%21+Gostaria+de+agendar+uma+consulta.+Vi+seu+perfil+no+site+e+me+interessei+muito.+Pode+me+ajudar%3F";
-
-const clinicImages = [
-  {
-    url: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=800&q=80",
-    alt: "Recepção da clínica",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&q=80",
-    alt: "Sala de procedimentos",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80",
-    alt: "Sala de espera",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=800&q=80",
-    alt: "Consultório",
-  },
-];
 
 const schedule = [
   { day: "Segunda-feira", hours: "09:00 – 19:00" },
