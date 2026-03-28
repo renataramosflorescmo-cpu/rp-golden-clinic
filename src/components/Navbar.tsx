@@ -47,9 +47,15 @@ const Navbar = () => {
         <ul className="hidden lg:flex items-center gap-8">
           {navLinks.map((l) => (
             <li key={l.href}>
-              <a href={l.href} className="font-body text-sm font-light tracking-wide text-foreground/60 hover:text-primary transition-colors uppercase">
-                {l.label}
-              </a>
+              {l.href.startsWith("/") ? (
+                <Link to={l.href} className="font-body text-sm font-light tracking-wide text-foreground/60 hover:text-primary transition-colors uppercase">
+                  {l.label}
+                </Link>
+              ) : (
+                <a href={l.href} className="font-body text-sm font-light tracking-wide text-foreground/60 hover:text-primary transition-colors uppercase">
+                  {l.label}
+                </a>
+              )}
             </li>
           ))}
           <li ref={dropdownRef} className="relative">
