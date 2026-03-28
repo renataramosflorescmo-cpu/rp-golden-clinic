@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
 import profhiloHero from "@/assets/profhilo-hero.jpg";
+import profhiloPontos from "@/assets/profhilo-pontos.png";
 
 const WHATSAPP_URL =
   "https://wa.me/5511932110460?text=Ol%C3%A1%2C+Dra.+Roberta%21+Gostaria+de+saber+mais+sobre+Profhilo.";
