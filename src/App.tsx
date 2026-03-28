@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound.tsx";
 import SedeChacaraSantoAntonio from "./pages/SedeChacaraSantoAntonio.tsx";
 import Contato from "./pages/Contato.tsx";
 import Resultados from "./pages/Resultados.tsx";
+import ToxinaBotulinica from "./pages/ToxinaBotulinica.tsx";
 
 const queryClient = new QueryClient();
 
