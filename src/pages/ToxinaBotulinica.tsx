@@ -5,7 +5,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
 import toxinaHero from "@/assets/toxina-hero.jpg";
-import toxinaBenefits from "@/assets/toxina-benefits.jpg";
 
 const WHATSAPP_URL =
   "https://wa.me/5511932110460?text=Ol%C3%A1%2C+Dra.+Roberta%21+Gostaria+de+saber+mais+sobre+Toxina+Botul%C3%ADnica.";
