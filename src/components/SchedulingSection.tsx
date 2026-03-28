@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { User, Mail, Phone, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
-import treatmentImg from "@/assets/treatment.jpg";
+
 
 const WHATSAPP_URL = "https://wa.me/5511932110460";
 
