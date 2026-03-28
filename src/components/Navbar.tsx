@@ -121,7 +121,7 @@ const Navbar = () => {
             <ul className="flex flex-col gap-4 px-6 py-6">
               {navLinks.map((l) => (
                 <li key={l.href}>
-                  {l.href.startsWith("/") ? (
+                  {l.href.startsWith("/") && !l.href.includes("#") ? (
                     <Link to={l.href} onClick={() => setOpen(false)} className="font-body text-sm tracking-wide uppercase text-foreground/70 hover:text-primary">
                       {l.label}
                     </Link>
