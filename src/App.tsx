@@ -7,6 +7,7 @@ import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import SedeChacaraSantoAntonio from "./pages/SedeChacaraSantoAntonio.tsx";
 import Contato from "./pages/Contato.tsx";
+import Resultados from "./pages/Resultados.tsx";
 
 const queryClient = new QueryClient();
 
