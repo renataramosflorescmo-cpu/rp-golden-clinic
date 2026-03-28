@@ -20,6 +20,7 @@ const treatmentsByCategory: Record<Category, { icon: any; title: string; desc: s
       title: "Bioestimuladores de Colágeno",
       desc: "Produtos injetados no tecido subcutâneo que estimulam a produção natural de colágeno com resultados duradouros.",
       whatsMsg: "Olá, Dra. Roberta! Gostaria de saber mais sobre Bioestimuladores de Colágeno.",
+      slug: "/tratamentos/bioestimuladores-colageno",
     },
     {
       icon: Syringe,
