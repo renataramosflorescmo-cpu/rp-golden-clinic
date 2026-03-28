@@ -79,12 +79,13 @@ const ToxinaBotulinica = () => {
 
       {/* About Dra. Roberta */}
       <section className="py-20 px-6">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+        <div className="max-w-7xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
+            className="max-w-3xl"
           >
             <p className="font-body text-xs tracking-[0.3em] uppercase text-primary mb-3">Especialista</p>
             <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-6">
@@ -96,22 +97,6 @@ const ToxinaBotulinica = () => {
             <p className="font-body text-foreground/60 text-sm font-light leading-relaxed">
               Sua dedicação à beleza e saúde da pele é evidenciada pelo sucesso de seus tratamentos personalizados, sendo uma referência em dermatologia estética com formação sólida e vasta experiência em procedimentos avançados.
             </p>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="rounded-md overflow-hidden"
-          >
-            <img
-              src={toxinaBenefits}
-              alt="Resultados naturais"
-              loading="lazy"
-              width={800}
-              height={1024}
-              className="w-full h-[500px] object-cover rounded-md"
-            />
           </motion.div>
         </div>
       </section>
