@@ -13,6 +13,7 @@ import BioestimuladorColageno from "./pages/BioestimuladorColageno.tsx";
 import EnzimasLipoliticas from "./pages/EnzimasLipoliticas.tsx";
 import PreenchimentoAcidoHialuronico from "./pages/PreenchimentoAcidoHialuronico.tsx";
 import Profhilo from "./pages/Profhilo.tsx";
+import PDRNPage from "./pages/PDRN.tsx";
 
 const queryClient = new QueryClient();
 
