@@ -147,14 +147,24 @@ const ServicesSection = () => {
                 </div>
                 <h3 className="font-display text-2xl font-semibold text-foreground mb-3">{t.title}</h3>
                 <p className="font-body text-muted-foreground text-sm font-light leading-relaxed mb-6">{t.desc}</p>
-                <a
-                  href={`${WHATSAPP_BASE}${encodeURIComponent(t.whatsMsg)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-primary font-body text-xs tracking-[0.15em] uppercase font-medium hover:text-gold-dark transition-colors"
-                >
-                  Agendar <span>→</span>
-                </a>
+                <div className="flex items-center gap-6">
+                  <a
+                    href={`${WHATSAPP_BASE}${encodeURIComponent(t.whatsMsg)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-primary font-body text-xs tracking-[0.15em] uppercase font-medium hover:text-gold-dark transition-colors"
+                  >
+                    Agendar <span>→</span>
+                  </a>
+                  {t.slug && (
+                    <Link
+                      to={t.slug}
+                      className="inline-flex items-center gap-2 text-foreground/40 font-body text-xs tracking-[0.15em] uppercase font-medium hover:text-primary transition-colors"
+                    >
+                      Saiba mais <span>→</span>
+                    </Link>
+                  )}
+                </div>
               </motion.div>
             ))}
           </motion.div>
