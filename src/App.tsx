@@ -7,6 +7,7 @@ import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import SedeChacaraSantoAntonio from "./pages/SedeChacaraSantoAntonio.tsx";
 import Contato from "./pages/Contato.tsx";
+import Resultados from "./pages/Resultados.tsx";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/sede-chacara-santo-antonio" element={<SedeChacaraSantoAntonio />} />
           <Route path="/contato" element={<Contato />} />
+          <Route path="/resultados" element={<Resultados />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
