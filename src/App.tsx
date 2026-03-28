@@ -12,6 +12,7 @@ import ToxinaBotulinica from "./pages/ToxinaBotulinica.tsx";
 import BioestimuladorColageno from "./pages/BioestimuladorColageno.tsx";
 import EnzimasLipoliticas from "./pages/EnzimasLipoliticas.tsx";
 import PreenchimentoAcidoHialuronico from "./pages/PreenchimentoAcidoHialuronico.tsx";
+import Profhilo from "./pages/Profhilo.tsx";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/tratamentos/bioestimuladores-colageno" element={<BioestimuladorColageno />} />
           <Route path="/tratamentos/enzimas-lipoliticas" element={<EnzimasLipoliticas />} />
           <Route path="/tratamentos/preenchimento-acido-hialuronico" element={<PreenchimentoAcidoHialuronico />} />
+          <Route path="/tratamentos/profhilo" element={<Profhilo />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
