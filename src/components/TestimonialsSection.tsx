@@ -1,28 +1,21 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
-const testimonials = [
-  {
-    name: "Camila Rodrigues",
-    role: "Bioestimuladores",
-    text: "A Dra. Roberta é incrível! Fiz bioestimuladores de colágeno e o resultado ficou super natural. Minha pele nunca esteve tão bonita.",
-    stars: 5,
-  },
-  {
-    name: "Fernanda Lima",
-    role: "Preenchimento",
-    text: "Procurei a Dra. Roberta para preenchimento facial e fiquei encantada com a delicadeza e profissionalismo. Resultado harmonioso e natural.",
-    stars: 5,
-  },
-  {
-    name: "Juliana Santos",
-    role: "Toxina Botulínica",
-    text: "Depois de anos com receio de aplicar botox, encontrei na Dra. Roberta a confiança que precisava. Resultado leve, sem exageros.",
-    stars: 5,
-  },
+const fallbackTestimonials = [
+  { name: "Camila Rodrigues", role: "Bioestimuladores", text: "A Dra. Roberta é incrível! Fiz bioestimuladores de colágeno e o resultado ficou super natural. Minha pele nunca esteve tão bonita.", stars: 5 },
+  { name: "Fernanda Lima", role: "Preenchimento", text: "Procurei a Dra. Roberta para preenchimento facial e fiquei encantada com a delicadeza e profissionalismo. Resultado harmonioso e natural.", stars: 5 },
+  { name: "Juliana Santos", role: "Toxina Botulínica", text: "Depois de anos com receio de aplicar botox, encontrei na Dra. Roberta a confiança que precisava. Resultado leve, sem exageros.", stars: 5 },
 ];
 
 const TestimonialsSection = () => {
+  const [testimonials, setTestimonials] = useState(fallbackTestimonials);
+  useEffect(() => {
+    supabase.from("site_testimonials").select("*").eq("visible", true).order("sort_order").then(({ data }) => {
+      if (data && data.length > 0) setTestimonials(data);
+    });
+  }, []);
   return (
     <section id="depoimentos" className="section-padding bg-background">
       <div className="max-w-7xl mx-auto">

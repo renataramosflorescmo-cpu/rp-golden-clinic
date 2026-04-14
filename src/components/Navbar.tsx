@@ -4,12 +4,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const navLinks = [
-  { label: "Início", href: "#inicio" },
-  { label: "Sobre", href: "#sobre" },
-  { label: "Tratamentos", href: "#tratamentos" },
+  { label: "Tratamentos", href: "/#tratamentos" },
   { label: "Resultados", href: "/resultados" },
-  { label: "Depoimentos", href: "/#depoimentos" },
   { label: "Contato", href: "/contato" },
+  { label: "Blog", href: "/blog" },
 ];
 
 const unidades = [
@@ -38,11 +36,11 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border/50">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
-        <a href="#inicio" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <span className="font-display text-xl font-semibold tracking-[0.25em] uppercase text-foreground">
             Golden Clinic
           </span>
-        </a>
+        </Link>
 
         <ul className="hidden lg:flex items-center gap-8">
           {navLinks.map((l) => (
@@ -95,12 +93,12 @@ const Navbar = () => {
         </ul>
 
         <div className="hidden lg:flex items-center gap-3">
-          <a
-            href="#golden-friends"
+          <Link
+            to="/golden-friends"
             className="border border-primary text-primary px-6 py-2.5 rounded-sm text-xs font-medium tracking-[0.15em] uppercase hover:bg-primary hover:text-primary-foreground transition-colors"
           >
             Golden Friends
-          </a>
+          </Link>
           <a
             href={WHATSAPP_URL}
             target="_blank"
@@ -172,10 +170,10 @@ const Navbar = () => {
                 </AnimatePresence>
               </li>
               <li>
-                <a href="#golden-friends" onClick={() => setOpen(false)}
+                <Link to="/golden-friends" onClick={() => setOpen(false)}
                   className="inline-flex border border-primary text-primary px-6 py-2.5 rounded-sm text-xs font-medium tracking-[0.15em] uppercase">
                   Golden Friends
-                </a>
+                </Link>
               </li>
               <li>
                 <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}

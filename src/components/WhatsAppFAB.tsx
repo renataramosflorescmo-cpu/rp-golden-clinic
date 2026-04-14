@@ -8,9 +8,9 @@ const WhatsAppFAB = () => (
     target="_blank"
     rel="noopener noreferrer"
     className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[hsl(142,70%,45%)] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-    aria-label="WhatsApp"
+    aria-label="Abrir conversa no WhatsApp com a RP Golden Clinic"
   >
-    <MessageCircle size={28} className="text-primary-foreground" />
+    <MessageCircle size={28} className="text-primary-foreground" aria-hidden="true" />
   </a>
 );
 

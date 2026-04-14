@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { TrendingUp, Award, Users, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
@@ -12,19 +13,10 @@ const stats = [
   { icon: Star, metric: "4.9/5", title: "Avaliação", desc: "Nota média em avaliações verificadas." },
 ];
 
-const galleryImages = [
+const fallbackImages = [
   { src: "https://drarobertacastro.com.br/wp-content/uploads/2025/03/cd345662-3bcf-4da4-9798-fb681fc0c4fc.jpg", alt: "Resultado 1" },
   { src: "https://drarobertacastro.com.br/wp-content/uploads/2025/03/cdab084a-6076-4639-907b-51ed7e7feaa4.jpg", alt: "Resultado 2" },
   { src: "https://drarobertacastro.com.br/wp-content/uploads/2025/03/Screenshot_1.jpg", alt: "Resultado 3" },
-  { src: "https://drarobertacastro.com.br/wp-content/uploads/2025/03/Screenshot_2.jpg", alt: "Resultado 4" },
-  { src: "https://drarobertacastro.com.br/wp-content/uploads/2025/03/Screenshot_3.jpg", alt: "Resultado 5" },
-  { src: "https://drarobertacastro.com.br/wp-content/uploads/2025/03/Screenshot_4.jpg", alt: "Resultado 6" },
-  { src: "https://drarobertacastro.com.br/wp-content/uploads/2025/03/Screenshot_5.jpg", alt: "Resultado 7" },
-  { src: "https://drarobertacastro.com.br/wp-content/uploads/2025/03/Screenshot_6.jpg", alt: "Resultado 8" },
-  { src: "https://drarobertacastro.com.br/wp-content/uploads/2025/03/Screenshot_7.jpg", alt: "Resultado 9" },
-  { src: "https://drarobertacastro.com.br/wp-content/uploads/2025/03/Screenshot_8.jpg", alt: "Resultado 10" },
-  { src: "https://drarobertacastro.com.br/wp-content/uploads/2025/03/Screenshot_9.jpg", alt: "Resultado 11" },
-  { src: "https://drarobertacastro.com.br/wp-content/uploads/2025/03/Screenshot_10.jpg", alt: "Resultado 12" },
 ];
 
 const ITEMS_PER_PAGE = 3;
@@ -32,6 +24,13 @@ const ITEMS_PER_PAGE = 3;
 const Resultados = () => {
   const [page, setPage] = useState(0);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [galleryImages, setGalleryImages] = useState(fallbackImages.map(i => ({ src: i.src, alt: i.alt })));
+
+  useEffect(() => {
+    supabase.from("site_results").select("*").eq("is_visible", true).order("sort_order").then(({ data }) => {
+      if (data && data.length > 0) setGalleryImages(data.map((r: any) => ({ src: r.image_url, alt: r.alt_text })));
+    });
+  }, []);
 
   const totalPages = Math.ceil(galleryImages.length / ITEMS_PER_PAGE);
   const currentImages = galleryImages.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
@@ -151,6 +150,50 @@ const Resultados = () => {
                 <ChevronRight size={20} className="text-foreground/70" />
               </button>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Depoimentos */}
+      <section className="section-padding bg-background">
+        <div className="max-w-7xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12">
+            <p className="font-body text-xs tracking-[0.3em] uppercase text-primary mb-3">Depoimentos</p>
+            <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground">O que dizem nossas pacientes</h2>
+            <div className="mt-4 w-12 h-0.5 bg-primary mx-auto rounded-full" />
+          </motion.div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { name: "Camila Rodrigues", role: "BIOESTIMULADORES", text: "A Dra. Roberta é incrível! Fiz bioestimuladores de colágeno e o resultado ficou super natural. Minha pele nunca esteve tão bonita.", initials: "CR" },
+              { name: "Fernanda Lima", role: "PREENCHIMENTO", text: "Procurei a Dra. Roberta para preenchimento facial e fiquei encantada com a delicadeza e profissionalismo. Resultado harmonioso e natural.", initials: "FL" },
+              { name: "Juliana Santos", role: "TOXINA BOTULÍNICA", text: "Depois de anos com receio de aplicar botox, encontrei na Dra. Roberta a confiança que precisava. Resultado leve, sem exageros.", initials: "JS" },
+            ].map((t, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="bg-card rounded-xl border border-border/50 p-8"
+              >
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, j) => (
+                    <Star key={j} size={14} className="text-primary fill-primary" />
+                  ))}
+                  <span className="ml-auto font-display text-3xl text-primary/15 font-light">&ldquo;&rdquo;</span>
+                </div>
+                <p className="font-body text-sm font-light text-foreground/70 leading-relaxed italic mb-6">"{t.text}"</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#b8935a] to-[#c9a96e] flex items-center justify-center text-white font-body text-xs font-semibold">
+                    {t.initials}
+                  </div>
+                  <div>
+                    <p className="font-body text-sm font-medium text-foreground">{t.name}</p>
+                    <p className="font-body text-xs tracking-[0.1em] uppercase text-foreground/40">{t.role}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>

@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Sparkles, Syringe, Pill, Scissors, Droplets, Leaf, HeartPulse, Zap } from "lucide-react";
+import { supabase } from "@/lib/supabase";
+
+const iconMap: Record<string, any> = { Sparkles, Syringe, Pill, Scissors, Droplets, Leaf, HeartPulse, Zap };
 
 const WHATSAPP_BASE = "https://wa.me/5511932110460?text=";
 
@@ -96,7 +99,18 @@ const treatmentsByCategory: Record<Category, { icon: any; title: string; desc: s
 
 const ServicesSection = () => {
   const [activeCategory, setActiveCategory] = useState<Category>("facial");
-  const treatments = treatmentsByCategory[activeCategory];
+  const [dbTreatments, setDbTreatments] = useState<any[]>([]);
+
+  useEffect(() => {
+    supabase.from("site_treatments").select("*").eq("visible", true).order("sort_order").then(({ data }) => {
+      if (data && data.length > 0) setDbTreatments(data);
+    });
+  }, []);
+
+  // Use DB treatments if available, otherwise fallback to hardcoded
+  const treatments = dbTreatments.length > 0
+    ? dbTreatments.map(t => ({ icon: iconMap[t.icon] || Sparkles, title: t.title, desc: t.short_description, whatsMsg: `Olá, Dra. Roberta! Gostaria de saber mais sobre ${t.title}.`, slug: t.slug ? `/tratamentos/${t.slug}` : undefined }))
+    : treatmentsByCategory[activeCategory];
 
   return (
     <section id="tratamentos" className="section-padding bg-card">

@@ -39,6 +39,23 @@ const SchedulingSection = () => {
   return (
     <section id="contato" className="section-padding bg-background">
       <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-10"
+        >
+          <p className="font-body text-xs tracking-[0.3em] uppercase text-primary mb-3">Agendamento</p>
+          <h2 className="font-display text-4xl md:text-5xl font-semibold text-foreground mb-4">
+            Agende sua consulta
+          </h2>
+          <div className="w-12 h-px bg-accent mb-8" />
+          <p className="font-body text-muted-foreground font-light leading-relaxed">
+            Preencha o formulário e você será redirecionada ao WhatsApp para confirmar diretamente com a equipe.
+          </p>
+        </motion.div>
+
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -46,17 +63,7 @@ const SchedulingSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="font-body text-xs tracking-[0.3em] uppercase text-primary mb-3">Agendamento</p>
-            <h2 className="font-display text-4xl md:text-5xl font-semibold text-foreground mb-4">
-              Agende sua consulta
-            </h2>
-            <div className="w-12 h-px bg-accent mb-8" />
-            <p className="font-body text-muted-foreground font-light mb-8 leading-relaxed">
-              Preencha o formulário e você será redirecionada ao WhatsApp para confirmar diretamente com a equipe.
-            </p>
-
-            <img src={treatmentImg} alt="Tratamento estético" loading="lazy" className="rounded-sm mb-8 w-full shadow-lg" />
-
+            <img src={treatmentImg} alt="Tratamento estético" loading="lazy" className="rounded-sm w-full shadow-lg" />
           </motion.div>
 
           <motion.form
@@ -90,8 +97,11 @@ const SchedulingSection = () => {
               <textarea name="message" value={form.message} onChange={handleChange} placeholder="Mensagem (opcional)" rows={3} className={`${inputClass} pl-11 resize-none`} />
             </div>
             <button type="submit" className="w-full bg-gold-gradient text-primary-foreground py-4 rounded-sm text-xs font-medium tracking-[0.2em] uppercase hover:opacity-90 transition-opacity">
-              Agendar via WhatsApp
+              Enviar
             </button>
+            <p className="font-body text-xs text-foreground/40 text-center mt-3 leading-relaxed">
+              Ao enviar os dados acima, eu concordo em receber contatos e mensagens da RP Golden Clinic.
+            </p>
           </motion.form>
         </div>
       </div>

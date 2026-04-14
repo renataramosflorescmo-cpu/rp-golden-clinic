@@ -1,30 +1,123 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="RP Golden Clinic -Especialista em Dermatologia Clínica, Cirúrgica e Estética Avançada. Atendimento exclusivo em São Paulo.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- TODO: Set the document title to the name of your application -->
-    <title>Lovable App</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
+    <title>RP Golden Clinic - Dermatologia Estetica Avancada em Sao Paulo</title>
+    <meta name="description" content="RP Golden Clinic - Especialista em Dermatologia Clinica, Cirurgica e Estetica Avancada. Dra. Roberta Castro Peres, CRM 160891. Atendimento exclusivo em Sao Paulo." />
+    <meta name="author" content="Dra. Roberta Castro Peres - CRM 160891" />
+    <meta name="keywords" content="dermatologista sao paulo, dermatologia estetica, bioestimulador colageno, preenchimento facial, toxina botulinica, harmonizacao facial, RP Golden Clinic, Dra Roberta Castro" />
 
-    <!-- TODO: Update og:title to match your application name -->
-    
-    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/logo-rp.png" />
+    <link rel="apple-touch-icon" href="/logo-rp.png" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://express-my-value.vercel.app/" />
+
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://bggqklkeqdmkefvrjuka.supabase.co" />
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f82aa232-c84d-48a8-9b9f-7f921171c9a3/id-preview-8962da90--6a0b3147-08b2-4354-bd37-cb73830c8b97.lovable.app-1774663934189.png">
+    <meta property="og:url" content="https://express-my-value.vercel.app/" />
+    <meta property="og:title" content="RP Golden Clinic - Dermatologia Estetica Avancada" />
+    <meta property="og:description" content="Especialista em Dermatologia Clinica, Cirurgica e Estetica Avancada. Dra. Roberta Castro Peres, CRM 160891. Atendimento exclusivo em Sao Paulo." />
+    <meta property="og:image" content="https://express-my-value.vercel.app/logo-rp.png" />
 
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@Lovable" />
-    <meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f82aa232-c84d-48a8-9b9f-7f921171c9a3/id-preview-8962da90--6a0b3147-08b2-4354-bd37-cb73830c8b97.lovable.app-1774663934189.png">
-    <meta property="og:title" content="Lovable App">
-  <meta name="twitter:title" content="Lovable App">
-  <meta property="og:description" content="RP Golden Clinic -Especialista em Dermatologia Clínica, Cirúrgica e Estética Avançada. Atendimento exclusivo em São Paulo.">
-  <meta name="twitter:description" content="RP Golden Clinic -Especialista em Dermatologia Clínica, Cirúrgica e Estética Avançada. Atendimento exclusivo em São Paulo.">
-</head>
+    <meta name="twitter:site" content="@drarobertacastrodermatologia" />
+    <meta name="twitter:title" content="RP Golden Clinic - Dermatologia Estetica Avancada" />
+    <meta name="twitter:description" content="Especialista em Dermatologia Clinica, Cirurgica e Estetica Avancada. Dra. Roberta Castro Peres, CRM 160891." />
+    <meta name="twitter:image" content="https://express-my-value.vercel.app/logo-rp.png" />
+
+    <!-- Schema.org MedicalBusiness + Physician -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": ["MedicalBusiness", "Physician"],
+      "name": "RP Golden Clinic",
+      "description": "Especialista em Dermatologia Clinica, Cirurgica e Estetica Avancada. Autoestima, confianca e transformacao atraves da ciencia e do cuidado refinado com a pele.",
+      "url": "https://express-my-value.vercel.app/",
+      "telephone": "+55-11-93211-0460",
+      "email": "contato@drarobertacastro.com.br",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Rua Luis Correia de Melo, 92",
+        "addressLocality": "Sao Paulo",
+        "addressRegion": "SP",
+        "postalCode": "04726-220",
+        "addressCountry": "BR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -23.6478,
+        "longitude": -46.6978
+      },
+      "openingHours": ["Mo-Fr 09:00-19:00", "Sa 09:00-13:00"],
+      "sameAs": [
+        "https://www.instagram.com/drarobertacastrodermatologia"
+      ],
+      "medicalSpecialty": "Dermatology",
+      "employee": {
+        "@type": "Physician",
+        "name": "Dra. Roberta Castro Peres",
+        "medicalSpecialty": "Dermatology",
+        "identifier": "CRM 160891"
+      }
+    }
+    </script>
+
+    <!-- Schema.org FAQPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Quais tratamentos esteticos a Dra. Roberta oferece?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A Dra. Roberta oferece bioestimuladores de colageno, preenchimento com acido hialuronico, toxina botulinica, Profhilo, PDRN, enzimas lipoliticas, mesoterapia capilar, LED capilar, PRP capilar, remodelacao glutea e bioestimuladores corporais."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Onde fica a RP Golden Clinic?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A RP Golden Clinic fica na Rua Luis Correia de Melo, 92 - Chacara Santo Antonio, Sao Paulo - SP, CEP 04726-220."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Como agendar uma consulta na RP Golden Clinic?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Voce pode agendar sua consulta pelo WhatsApp (11) 93211-0460 ou pelo site. O atendimento e de segunda a sexta das 9h as 19h e sabados das 9h as 13h."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "A Dra. Roberta atende pelo convenio?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A RP Golden Clinic oferece atendimento particular com foco em dermatologia estetica avancada. Para valores e formas de pagamento, entre em contato pelo WhatsApp."
+          }
+        }
+      ]
+    }
+    </script>
+  </head>
 
   <body>
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:rounded focus:shadow">
+      Pular para o conteudo principal
+    </a>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

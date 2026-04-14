@@ -1,9 +1,17 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import heroImg from "@/assets/hero-golden.jpg";
+import { supabase } from "@/lib/supabase";
 
-const WHATSAPP_URL = "https://wa.me/5511932110460?text=Ol%C3%A1%2C+Dra.+Roberta%21+Gostaria+de+agendar+uma+consulta.+Vi+seu+perfil+no+site+e+me+interessei+muito.+Pode+me+ajudar%3F";
+const WHATSAPP_URL_DEFAULT = "https://wa.me/5511932110460?text=Ol%C3%A1%2C+Dra.+Roberta%21+Gostaria+de+agendar+uma+consulta.+Vi+seu+perfil+no+site+e+me+interessei+muito.+Pode+me+ajudar%3F";
 
 const HeroSection = () => {
+  const [hero, setHero] = useState<any>(null);
+  useEffect(() => {
+    supabase.from("site_hero").select("*").limit(1).single().then(({ data }) => { if (data) setHero(data); });
+  }, []);
+  const ctaLink = hero?.cta_link || WHATSAPP_URL_DEFAULT;
+  const ctaText = hero?.cta_text || "Agendar Consulta";
   return (
     <section id="inicio" className="relative min-h-screen flex items-center overflow-hidden pt-16">
       <div className="absolute inset-0">
@@ -45,12 +53,12 @@ const HeroSection = () => {
 
           <div className="flex flex-col sm:flex-row gap-4">
             <a
-              href={WHATSAPP_URL}
+              href={ctaLink}
               target="_blank"
               rel="noopener noreferrer"
               className="bg-gold-gradient text-primary-foreground px-8 py-4 rounded-sm text-xs font-medium tracking-[0.2em] uppercase hover:opacity-90 transition-opacity text-center"
             >
-              Agendar Consulta
+              {ctaText}
             </a>
             <a
               href="#tratamentos"
