@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus, Edit3, Trash2, Eye, EyeOff, LogOut, FileText, Upload, Save, ArrowLeft,
-  Image as ImageIcon, X, Star, Home, User, MessageSquare, MapPin, Scissors, BookOpen, Heart, Users, Sparkles, Search, Globe, Settings, FileCode, Shield, Camera,
+  Image as ImageIcon, X, Star, Home, User, MessageSquare, MapPin, Scissors, BookOpen, Heart, Users, Sparkles, Search, Globe, Settings, FileCode, Shield, Camera, Inbox, Instagram, Video,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase, STORAGE_BUCKET } from "@/lib/supabase";
+import { claudeMessage, geminiImage } from "@/lib/aiProxy";
+import AdminVideoAgent from "./AdminVideoAgent";
 
 // ─── Types ─────────────────────────────────────────────
 interface Article { id: string; title: string; slug: string; excerpt: string; content: string; category: string; image_url: string; author: string; read_time: number; status: string; meta_description: string; keyword: string; featured: boolean; scheduled_at: string | null; created_at: string; }
@@ -16,7 +18,9 @@ interface Treatment { id: string; title: string; short_description: string; slug
 interface HeroData { id: string; title: string; subtitle: string; cta_text: string; cta_link: string; image_url: string; }
 interface AboutData { id: string; name: string; crm: string; title: string; description: string; badge_text: string; image_url: string; }
 
-type Section = "blog" | "hero" | "about" | "testimonials" | "units" | "treatments" | "referrals" | "seo" | "config" | "results";
+type Section = "home" | "blog" | "hero" | "about" | "testimonials" | "units" | "treatments" | "referrals" | "seo" | "config" | "results" | "leads" | "instagram" | "google" | "videos" | "analytics" | "analyticsBlog";
+interface GoogleReview { id: string; author_name: string; author_photo: string; rating: number; text: string; reply: string; review_date: string; unit_name: string; is_visible: boolean; sort_order: number; }
+interface Lead { id: string; name: string; phone: string; email: string; service: string; message: string; source: string; created_at: string; }
 interface ResultImage { id: string; image_url: string; alt_text: string; treatment: string; sort_order: number; is_visible: boolean; }
 interface SeoPage { id: string; page_key: string; title: string; description: string; keywords: string; og_image: string; canonical_url: string; schema_json: string; }
 interface Referral { id: string; referrer_name: string; referrer_email: string; referrer_phone: string; friend_name: string; friend_contact: string; friend_age_range: string; quiz_slug: string; quiz_completed: boolean; friend_email: string; pdf_sent: boolean; status: string; notes: string; created_at: string; }
@@ -62,55 +66,114 @@ function useImageUpload() {
 // ─── Main Admin ────────────────────────────────────────
 export default function Admin() {
   const navigate = useNavigate();
-  const [section, setSection] = useState<Section>("blog");
+  const [section, setSection] = useState<Section>("home");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { uploading, upload } = useImageUpload();
 
-  useEffect(() => {
-    if (sessionStorage.getItem("rp_admin") !== "true") { navigate("/admin/login"); }
-  }, []);
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    navigate("/admin/login", { replace: true });
+  }
 
-  const sidebarItems: { key: Section; label: string; icon: any }[] = [
-    { key: "hero", label: "Hero", icon: Home },
-    { key: "about", label: "Sobre", icon: User },
-    { key: "treatments", label: "Tratamentos", icon: Scissors },
-    { key: "testimonials", label: "Depoimentos", icon: MessageSquare },
-    { key: "results", label: "Resultados", icon: Camera },
-    { key: "units", label: "Unidades", icon: MapPin },
-    { key: "referrals", label: "Golden Friends", icon: Heart },
-    { key: "seo", label: "SEO", icon: Globe },
-    { key: "config", label: "Configuracao", icon: Settings },
-    { key: "blog", label: "Blog", icon: BookOpen },
+  const sidebarGroups: { title: string; items: { key: Section; label: string; icon: any }[] }[] = [
+    {
+      title: "Páginas",
+      items: [
+        { key: "hero", label: "Hero", icon: Home },
+        { key: "about", label: "Sobre", icon: User },
+        { key: "treatments", label: "Tratamentos", icon: Scissors },
+        { key: "testimonials", label: "Depoimentos", icon: MessageSquare },
+        { key: "results", label: "Resultados", icon: Camera },
+        { key: "units", label: "Unidades", icon: MapPin },
+      ],
+    },
+    {
+      title: "Retenção",
+      items: [
+        { key: "referrals", label: "Golden Friends", icon: Heart },
+        { key: "leads", label: "Leads", icon: Inbox },
+      ],
+    },
+    {
+      title: "Conteúdo",
+      items: [
+        { key: "blog", label: "Blog", icon: BookOpen },
+        { key: "instagram", label: "IA Instagram", icon: Instagram },
+        { key: "videos", label: "IA Vídeos", icon: Video },
+      ],
+    },
+    {
+      title: "Performance",
+      items: [
+        { key: "seo", label: "SEO", icon: Globe },
+        { key: "analytics", label: "Analytics Site", icon: Search },
+        { key: "analyticsBlog", label: "Analytics Blog", icon: Search },
+        { key: "google", label: "Google Reviews", icon: Star },
+      ],
+    },
+    {
+      title: "Configuração",
+      items: [
+        { key: "config", label: "Configuração", icon: Settings },
+      ],
+    },
   ];
 
   return (
     <div className="min-h-screen bg-[#faf7f4] flex">
-      {/* Sidebar */}
-      <aside className="fixed top-0 left-0 bottom-0 w-56 bg-foreground flex flex-col z-50">
-        <div className="px-5 py-5 border-b border-white/10">
-          <h1 className="font-display text-sm font-semibold text-primary-foreground tracking-[0.15em] uppercase">Golden Clinic</h1>
-          <span className="bg-[#c9a96e]/20 text-[#c9a96e] text-[10px] px-2 py-0.5 rounded font-body mt-1 inline-block">Admin</span>
+      {/* Mobile header */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-foreground flex items-center justify-between px-4 py-3">
+        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-primary-foreground/70 p-1" aria-label="Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+        </button>
+        <div className="flex items-center gap-2">
+          <h1 className="font-display text-xs font-semibold text-primary-foreground tracking-[0.15em] uppercase">Golden Clinic</h1>
+          <span className="bg-[#c9a96e]/20 text-[#c9a96e] text-[9px] px-1.5 py-0.5 rounded font-body">Admin</span>
         </div>
-        <nav className="flex-1 py-4">
-          {sidebarItems.map((item) => (
-            <button key={item.key} onClick={() => setSection(item.key)}
-              className={`w-full flex items-center gap-3 px-5 py-3 text-left font-body text-sm transition-colors ${
-                section === item.key ? "bg-white/10 text-[#c9a96e]" : "text-primary-foreground/50 hover:text-primary-foreground/80"
-              }`}>
-              <item.icon size={16} /> {item.label}
-            </button>
+        <a href="/" target="_blank" className="text-primary-foreground/40 text-xs font-body">Site</a>
+      </div>
+
+      {/* Overlay */}
+      {sidebarOpen && <div className="lg:hidden fixed inset-0 bg-black/40 z-40" onClick={() => setSidebarOpen(false)} />}
+
+      {/* Sidebar */}
+      <aside className={`fixed top-0 left-0 bottom-0 w-56 bg-foreground flex flex-col z-50 transition-transform duration-200 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}>
+        <div className="px-5 py-5 border-b border-white/10 flex items-center justify-between">
+          <button onClick={() => { setSection("home"); setSidebarOpen(false); }} className="text-left">
+            <h1 className="font-display text-sm font-semibold text-primary-foreground tracking-[0.15em] uppercase hover:text-[#c9a96e] transition-colors">Golden Clinic</h1>
+            <span className="bg-[#c9a96e]/20 text-[#c9a96e] text-[10px] px-2 py-0.5 rounded font-body mt-1 inline-block">Admin</span>
+          </button>
+          <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-primary-foreground/40 p-1" aria-label="Fechar menu">
+            <X size={18} />
+          </button>
+        </div>
+        <nav className="flex-1 py-2 overflow-y-auto">
+          {sidebarGroups.map((group) => (
+            <div key={group.title} className="mb-1">
+              <p className="px-5 pt-4 pb-1 font-body text-[10px] tracking-[0.15em] uppercase text-primary-foreground/25 font-medium">{group.title}</p>
+              {group.items.map((item) => (
+                <button key={item.key} onClick={() => { setSection(item.key); setSidebarOpen(false); }}
+                  className={`w-full flex items-center gap-3 px-5 py-2.5 text-left font-body text-[13px] transition-colors ${
+                    section === item.key ? "bg-white/10 text-[#c9a96e]" : "text-primary-foreground/50 hover:text-primary-foreground/80"
+                  }`}>
+                  <item.icon size={15} /> {item.label}
+                </button>
+              ))}
+            </div>
           ))}
         </nav>
         <div className="px-5 py-4 border-t border-white/10 space-y-2">
           <a href="/" target="_blank" className="block text-primary-foreground/40 text-xs font-body hover:text-[#c9a96e]">Ver site</a>
-          <button onClick={() => { sessionStorage.removeItem("rp_admin"); navigate("/admin/login"); }} className="flex items-center gap-1 text-primary-foreground/40 text-xs font-body hover:text-red-400">
+          <button onClick={handleLogout} className="flex items-center gap-1 text-primary-foreground/40 text-xs font-body hover:text-red-400">
             <LogOut size={12} /> Sair
           </button>
         </div>
       </aside>
 
       {/* Content */}
-      <main className="ml-56 flex-1 p-8">
+      <main className="lg:ml-56 flex-1 p-4 pt-16 lg:p-8 lg:pt-8">
         <AnimatePresence mode="wait">
+          {section === "home" && <AdminHome key="home" onNavigate={setSection} />}
           {section === "blog" && <BlogSection key="blog" uploading={uploading} upload={upload} />}
           {section === "hero" && <HeroSection key="hero" uploading={uploading} upload={upload} />}
           {section === "about" && <AboutSection key="about" uploading={uploading} upload={upload} />}
@@ -118,12 +181,131 @@ export default function Admin() {
           {section === "units" && <UnitsSection key="units" />}
           {section === "treatments" && <TreatmentsSection key="treatments" uploading={uploading} upload={upload} />}
           {section === "results" && <ResultsAdminSection key="results" uploading={uploading} upload={upload} />}
+          {section === "analytics" && <AnalyticsSection key="analytics" type="site" />}
+          {section === "analyticsBlog" && <AnalyticsSection key="analyticsBlog" type="blog" />}
+          {section === "google" && <GoogleReviewsSection key="google" />}
+          {section === "leads" && <LeadsSection key="leads" />}
           {section === "referrals" && <ReferralsSection key="referrals" />}
+          {section === "instagram" && <InstagramAgentSection key="instagram" />}
+          {section === "videos" && <AdminVideoAgent key="videos" />}
           {section === "seo" && <SeoSection key="seo" />}
           {section === "config" && <ConfigSection key="config" />}
         </AnimatePresence>
       </main>
     </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════
+// ADMIN HOME
+// ═══════════════════════════════════════════════════════
+function AdminHome({ onNavigate }: { onNavigate: (s: Section) => void }) {
+  const quickGroups = [
+    {
+      title: "Páginas",
+      desc: "Gerencie o conteúdo das seções do site",
+      color: "from-[#b8935a] to-[#c9a96e]",
+      items: [
+        { key: "hero" as Section, label: "Hero", icon: Home },
+        { key: "about" as Section, label: "Sobre", icon: User },
+        { key: "treatments" as Section, label: "Tratamentos", icon: Scissors },
+        { key: "testimonials" as Section, label: "Depoimentos", icon: MessageSquare },
+        { key: "results" as Section, label: "Resultados", icon: Camera },
+        { key: "units" as Section, label: "Unidades", icon: MapPin },
+      ],
+    },
+    {
+      title: "Retenção",
+      desc: "Indicações, leads e relacionamento",
+      color: "from-pink-500 to-red-500",
+      items: [
+        { key: "referrals" as Section, label: "Golden Friends", icon: Heart },
+        { key: "leads" as Section, label: "Leads", icon: Inbox },
+      ],
+    },
+    {
+      title: "Conteúdo",
+      desc: "Blog, redes sociais e produção com IA",
+      color: "from-purple-500 to-indigo-500",
+      items: [
+        { key: "blog" as Section, label: "Blog", icon: BookOpen },
+        { key: "instagram" as Section, label: "IA Instagram", icon: Instagram },
+        { key: "videos" as Section, label: "IA Vídeos", icon: Video },
+      ],
+    },
+    {
+      title: "Performance",
+      desc: "SEO, analytics e avaliações",
+      color: "from-blue-500 to-cyan-500",
+      items: [
+        { key: "seo" as Section, label: "SEO", icon: Globe },
+        { key: "analytics" as Section, label: "Analytics Site", icon: Search },
+        { key: "analyticsBlog" as Section, label: "Analytics Blog", icon: Search },
+        { key: "google" as Section, label: "Google Reviews", icon: Star },
+      ],
+    },
+    {
+      title: "Configuração",
+      desc: "Privacidade, robots.txt e sitemap",
+      color: "from-gray-500 to-gray-700",
+      items: [
+        { key: "config" as Section, label: "Configuração", icon: Settings },
+      ],
+    },
+  ];
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <div className="mb-10">
+        <h1 className="font-display text-3xl font-semibold text-foreground mb-2">Painel Administrativo</h1>
+        <p className="font-body text-sm text-foreground/40">RP Golden Clinic · Bem-vinda ao admin. Escolha uma seção para começar.</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {quickGroups.map((group) => (
+          <div key={group.title} className="bg-white rounded-xl border border-[#c9a96e]/10 overflow-hidden hover:shadow-lg transition-shadow">
+            <div className={`bg-gradient-to-r ${group.color} p-5`}>
+              <h3 className="font-display text-lg font-semibold text-white">{group.title}</h3>
+              <p className="font-body text-xs text-white/70 mt-1">{group.desc}</p>
+            </div>
+            <div className="p-4">
+              <div className="space-y-1">
+                {group.items.map((item) => (
+                  <button
+                    key={item.key}
+                    onClick={() => onNavigate(item.key)}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left font-body text-sm text-foreground/70 hover:bg-[#c9a96e]/5 hover:text-foreground transition-colors"
+                  >
+                    <item.icon size={15} className="text-[#c9a96e]" />
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Quick stats */}
+      <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a href="/" target="_blank" className="bg-white rounded-xl border border-[#c9a96e]/10 p-5 text-center hover:shadow-md transition-shadow">
+          <Globe size={20} className="text-[#c9a96e] mx-auto mb-2" />
+          <p className="font-body text-xs text-foreground/40">Ver site</p>
+        </a>
+        <a href="/blog" target="_blank" className="bg-white rounded-xl border border-[#c9a96e]/10 p-5 text-center hover:shadow-md transition-shadow">
+          <BookOpen size={20} className="text-[#c9a96e] mx-auto mb-2" />
+          <p className="font-body text-xs text-foreground/40">Ver blog</p>
+        </a>
+        <a href="/golden-friends" target="_blank" className="bg-white rounded-xl border border-[#c9a96e]/10 p-5 text-center hover:shadow-md transition-shadow">
+          <Heart size={20} className="text-[#c9a96e] mx-auto mb-2" />
+          <p className="font-body text-xs text-foreground/40">Golden Friends</p>
+        </a>
+        <a href="/resultados" target="_blank" className="bg-white rounded-xl border border-[#c9a96e]/10 p-5 text-center hover:shadow-md transition-shadow">
+          <Camera size={20} className="text-[#c9a96e] mx-auto mb-2" />
+          <p className="font-body text-xs text-foreground/40">Resultados</p>
+        </a>
+      </div>
+    </motion.div>
   );
 }
 
@@ -447,6 +629,632 @@ function TreatmentsSection({ uploading, upload }: { uploading: boolean; upload: 
           </div>
         ))}
       </div>
+    </motion.div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════
+// INSTAGRAM AGENT SECTION
+// ═══════════════════════════════════════════════════════
+const IG_GUIDE = `Guia de Produção de Conteúdo para Instagram - RP Golden Clinic
+
+Tom de Voz: Autoridade Acolhedora. Elegância Acessível. Foco na Beleza Natural. Personalização.
+"Nossa missão não é transformar seu rosto, mas revelar a sua melhor versão com naturalidade e ciência." - Dra. Roberta
+
+Identidade Visual: Dourado (#C99C63) e Bege (#E5C578) para destaques. Tons neutros off-white (#FDFBF7) e marrom escuro (#4A3B2C). Tipografia serif para títulos; sem serifa para corpo.
+
+Pilares de Conteúdo:
+1. Adolescentes (Acne e Oleosidade) - Reels curtos, Stories Mito x Verdade
+2. Jovens 18-29 (Prevenção e Glow) - Carrosséis educativos, Reels de rotina
+3. Pele 30+ (Anti-Idade Preventivo) - Vídeos explicativos, Antes/Depois, infográficos
+4. Pele 50+ (Rejuvenescimento Intensivo) - Depoimentos, vídeos sobre tecnologias, empoderamento
+
+Estrutura do Post: 1) Gancho (Hook) nos primeiros 3 segundos 2) Conteúdo de Valor clínico acessível 3) CTA claro
+Hashtags: Mesclar amplas (#DermatologiaEstetica) com locais (#ClinicaEsteticaSP #BelezaNatural)
+Frequência: Feed 4-5x/semana. Stories diariamente (3-6 sequências).`;
+
+function InstagramAgentSection() {
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [selectedArticle, setSelectedArticle] = useState("");
+  const [format, setFormat] = useState("carrossel");
+  const [pillar, setPillar] = useState("geral");
+  const [customPrompt, setCustomPrompt] = useState("");
+  const [generating, setGenerating] = useState(false);
+  const [result, setResult] = useState<any>(null);
+  const [history, setHistory] = useState<any[]>([]);
+
+  useEffect(() => {
+    supabase.from("blog_articles").select("id, title, slug, excerpt, content, category").eq("status", "published").order("created_at", { ascending: false }).then(({ data }) => {
+      if (data) setArticles(data as Article[]);
+    });
+    const saved = localStorage.getItem("rp_ig_history");
+    if (saved) try { setHistory(JSON.parse(saved)); } catch {}
+  }, []);
+
+  const formats: Record<string, string> = {
+    carrossel: "Carrossel (5-10 slides)",
+    reel: "Roteiro de Reel (60-90s)",
+    story: "Sequência de Stories (4-6)",
+    feed: "Post Feed (legenda)",
+    caption: "Legenda para foto existente",
+  };
+  const pillars: Record<string, string> = {
+    geral: "Geral",
+    adolescente: "Pilar 1: Adolescentes (Acne)",
+    jovem: "Pilar 2: Jovens 18-29 (Prevenção)",
+    mais30: "Pilar 3: Pele 30+ (Anti-Idade)",
+    mais50: "Pilar 4: Pele 50+ (Rejuvenescimento)",
+  };
+
+  async function generate() {
+    setGenerating(true); setResult(null);
+    try {
+      const article = articles.find(a => a.id === selectedArticle);
+      const articleContext = article ? `\n\nArtigo de referência do blog:\nTítulo: ${article.title}\nCategoria: ${article.category}\nResumo: ${article.excerpt}\nConteúdo:\n${article.content?.substring(0, 2000)}` : "";
+      const pillarContext = pillar !== "geral" ? `\nPilar de conteúdo: ${pillars[pillar]}` : "";
+
+      const prompt = `${IG_GUIDE}
+${pillarContext}
+${articleContext}
+
+${customPrompt ? `Instrução adicional: ${customPrompt}` : ""}
+
+Gere conteúdo para Instagram no formato: ${formats[format]}
+
+Retorne SOMENTE JSON válido:
+{
+  "titulo": "Título do post",
+  "formato": "${format}",
+  "gancho": "Frase de abertura (hook) para captar atenção nos primeiros 3 segundos",
+  "slides": ["Slide 1: texto...", "Slide 2: texto..."],
+  "legenda": "Legenda completa para o Instagram com emojis e formatação",
+  "hashtags": ["#hashtag1", "#hashtag2"],
+  "cta": "Call to action principal",
+  "direcaoVisual": "Descrição da arte/foto recomendada para cada slide",
+  "pilar": "${pillars[pillar]}",
+  "melhorHorario": "Sugestão de horário para publicação"
+}`;
+
+      const data = await claudeMessage({ messages: [{ role: "user", content: prompt }] });
+      const text = data.content[0].text;
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error("Resposta inválida");
+      const parsed = JSON.parse(jsonMatch[0]);
+      setResult(parsed);
+      const newHistory = [{ ...parsed, createdAt: new Date().toISOString(), articleTitle: article?.title || "" }, ...history].slice(0, 20);
+      setHistory(newHistory);
+      localStorage.setItem("rp_ig_history", JSON.stringify(newHistory));
+    } catch (e: any) {
+      toast.error("Erro: " + (e.message || "").substring(0, 100));
+    }
+    setGenerating(false);
+  }
+
+  function copyToClipboard(text: string) { navigator.clipboard.writeText(text); toast.success("Copiado!"); }
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <div className="mb-8">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 flex items-center justify-center">
+            <Instagram size={20} className="text-white" />
+          </div>
+          <div>
+            <h2 className="font-display text-2xl font-semibold text-foreground">Agente IA Instagram</h2>
+            <p className="font-body text-sm text-foreground/40">Gere conteúdo para Instagram baseado nos artigos do blog e nas diretrizes da marca</p>
+          </div>
+        </div>
+      </div>
+
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left: Generator */}
+        <div className="lg:col-span-2 space-y-5">
+          <div className="bg-white rounded-xl border border-[#c9a96e]/10 p-6 space-y-5">
+            {/* Format */}
+            <div>
+              <label className="font-body text-sm font-medium text-foreground mb-3 block">Formato do conteúdo</label>
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                {Object.entries(formats).map(([key, label]) => (
+                  <button key={key} onClick={() => setFormat(key)}
+                    className={`px-3 py-2.5 rounded-lg border text-xs font-body text-center transition-all ${format === key ? "bg-gradient-to-r from-purple-50 to-pink-50 border-purple-300 text-purple-700" : "border-[#c9a96e]/20 text-foreground/50 hover:border-purple-200"}`}>
+                    {label.split(" (")[0]}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Pillar */}
+            <div>
+              <label className="font-body text-sm font-medium text-foreground mb-3 block">Pilar de conteúdo (faixa etária)</label>
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                {Object.entries(pillars).map(([key, label]) => (
+                  <button key={key} onClick={() => setPillar(key)}
+                    className={`px-3 py-2.5 rounded-lg border text-xs font-body text-center transition-all ${pillar === key ? "bg-[#c9a96e]/10 border-[#c9a96e] text-[#c9a96e]" : "border-[#c9a96e]/20 text-foreground/50 hover:border-[#c9a96e]/40"}`}>
+                    {label.split(":")[0]}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Blog article */}
+            <div>
+              <label className="font-body text-sm font-medium text-foreground mb-2 block">Artigo do blog como base (opcional)</label>
+              <select value={selectedArticle} onChange={e => setSelectedArticle(e.target.value)} className={inputClass}>
+                <option value="">Sem artigo - criar conteúdo original</option>
+                {articles.map(a => <option key={a.id} value={a.id}>{a.title}</option>)}
+              </select>
+            </div>
+
+            {/* Custom prompt */}
+            <div>
+              <label className="font-body text-sm font-medium text-foreground mb-2 block">Instrução adicional (opcional)</label>
+              <textarea value={customPrompt} onChange={e => setCustomPrompt(e.target.value)} rows={3} className={inputClass + " resize-none"} placeholder="Ex: Foque em bioestimuladores para mulheres 40+, tom mais informal..." />
+            </div>
+
+            <button onClick={generate} disabled={generating}
+              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white py-4 rounded-xl text-sm font-medium hover:opacity-90 disabled:opacity-50">
+              {generating ? <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> Gerando conteúdo...</> : <><Instagram size={18} /> Gerar Conteúdo Instagram</>}
+            </button>
+          </div>
+
+          {/* Result */}
+          {result && (
+            <div className="bg-white rounded-xl border border-[#c9a96e]/10 overflow-hidden">
+              <div className="p-6 border-b border-[#c9a96e]/10">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-body bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 px-3 py-1 rounded-full font-medium">{formats[result.formato] || result.formato}</span>
+                    {result.pilar && <span className="text-xs font-body text-foreground/30">{result.pilar}</span>}
+                  </div>
+                  {result.melhorHorario && <span className="text-xs font-body text-foreground/40">Melhor horário: {result.melhorHorario}</span>}
+                </div>
+                <h3 className="font-display text-xl font-semibold text-foreground mb-2">{result.titulo}</h3>
+                {result.gancho && <p className="font-body text-sm text-purple-600 italic">Hook: "{result.gancho}"</p>}
+              </div>
+
+              {/* Slides */}
+              {result.slides && result.slides.length > 0 && (
+                <div className="p-6 border-b border-[#c9a96e]/10">
+                  <p className="font-body text-xs tracking-[0.15em] uppercase text-[#c9a96e] font-medium mb-3">Slides / Sequência</p>
+                  <div className="space-y-3">
+                    {result.slides.map((slide: string, i: number) => (
+                      <div key={i} className="flex gap-3 items-start">
+                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center text-purple-600 text-xs font-bold flex-shrink-0">{i + 1}</div>
+                        <p className="font-body text-sm text-foreground/70 leading-relaxed">{slide}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Caption */}
+              {result.legenda && (
+                <div className="p-6 border-b border-[#c9a96e]/10">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="font-body text-xs tracking-[0.15em] uppercase text-[#c9a96e] font-medium">Legenda</p>
+                    <button onClick={() => copyToClipboard(result.legenda)} className="text-xs font-body text-purple-500 hover:underline">Copiar</button>
+                  </div>
+                  <div className="bg-[#faf7f4] rounded-lg p-4 font-body text-sm text-foreground/70 leading-relaxed whitespace-pre-wrap">{result.legenda}</div>
+                </div>
+              )}
+
+              {/* Hashtags */}
+              {result.hashtags && (
+                <div className="p-6 border-b border-[#c9a96e]/10">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="font-body text-xs tracking-[0.15em] uppercase text-[#c9a96e] font-medium">Hashtags</p>
+                    <button onClick={() => copyToClipboard(result.hashtags.join(" "))} className="text-xs font-body text-purple-500 hover:underline">Copiar todas</button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {result.hashtags.map((h: string, i: number) => (
+                      <span key={i} className="text-xs font-body bg-purple-50 text-purple-600 px-2 py-1 rounded-full">{h}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Visual direction */}
+              {result.direcaoVisual && (
+                <div className="p-6 border-b border-[#c9a96e]/10">
+                  <p className="font-body text-xs tracking-[0.15em] uppercase text-[#c9a96e] font-medium mb-3">Direção Visual</p>
+                  <p className="font-body text-sm text-foreground/60 leading-relaxed">{result.direcaoVisual}</p>
+                </div>
+              )}
+
+              {/* CTA */}
+              {result.cta && (
+                <div className="p-6">
+                  <p className="font-body text-xs tracking-[0.15em] uppercase text-[#c9a96e] font-medium mb-2">Call to Action</p>
+                  <p className="font-body text-sm font-medium text-foreground">{result.cta}</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Right: Sidebar */}
+        <div className="space-y-5">
+          {/* Guide info */}
+          <div className="bg-white rounded-xl border border-[#c9a96e]/10 p-5">
+            <p className="font-body text-xs tracking-[0.15em] uppercase text-[#c9a96e] font-medium mb-3">Diretrizes da Marca</p>
+            <div className="space-y-2 font-body text-xs text-foreground/50">
+              <p>- Tom: Autoridade Acolhedora, Elegância Acessível</p>
+              <p>- Cores: Dourado #C99C63, Bege #E5C578</p>
+              <p>- Foco: Beleza Natural, Personalização</p>
+              <p>- Freq: Feed 4-5x/semana, Stories diário</p>
+              <p>- Hook nos 3 primeiros segundos</p>
+              <p>- CTA claro em cada post</p>
+            </div>
+          </div>
+
+          {/* History */}
+          <div className="bg-white rounded-xl border border-[#c9a96e]/10 p-5">
+            <p className="font-body text-xs tracking-[0.15em] uppercase text-[#c9a96e] font-medium mb-3">Últimos gerados ({history.length})</p>
+            {history.length === 0 ? (
+              <p className="font-body text-xs text-foreground/30">Nenhum conteúdo gerado ainda</p>
+            ) : (
+              <div className="space-y-2 max-h-80 overflow-y-auto">
+                {history.map((h, i) => (
+                  <div key={i} className="p-3 bg-[#faf7f4] rounded-lg cursor-pointer hover:bg-[#c9a96e]/5" onClick={() => setResult(h)}>
+                    <p className="font-body text-xs font-medium text-foreground truncate">{h.titulo}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-[10px] font-body text-purple-500">{h.formato}</span>
+                      <span className="text-[10px] font-body text-foreground/30">{new Date(h.createdAt).toLocaleDateString("pt-BR")}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════
+// ANALYTICS SECTION
+// ═══════════════════════════════════════════════════════
+function AnalyticsSection({ type }: { type: "site" | "blog" }) {
+  const [gaId, setGaId] = useState(localStorage.getItem(`rp_ga_${type}`) || "");
+  const [embedUrl, setEmbedUrl] = useState(localStorage.getItem(`rp_ga_embed_${type}`) || "");
+  const [saved, setSaved] = useState(!!localStorage.getItem(`rp_ga_${type}`));
+
+  function saveConfig() {
+    localStorage.setItem(`rp_ga_${type}`, gaId);
+    localStorage.setItem(`rp_ga_embed_${type}`, embedUrl);
+    setSaved(true);
+    toast.success("Configuração salva!");
+  }
+
+  const issite = type === "site";
+  const title = issite ? "Google Analytics - Site" : "Google Analytics - Blog";
+  const desc = issite ? "Métricas de visitas, origens e páginas do site principal" : "Métricas de visitas, origens e artigos mais lidos do blog";
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <div className="mb-8">
+        <div className="flex items-center gap-3 mb-2">
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${issite ? "bg-blue-500" : "bg-green-500"}`}>
+            <Search size={20} className="text-white" />
+          </div>
+          <div>
+            <h2 className="font-display text-2xl font-semibold text-foreground">{title}</h2>
+            <p className="font-body text-sm text-foreground/40">{desc}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Config */}
+      <div className="bg-white rounded-xl border border-[#c9a96e]/10 p-6 mb-6 space-y-5">
+        <p className="font-body text-xs tracking-[0.15em] uppercase text-[#c9a96e] font-medium">Configuração</p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="font-body text-xs text-foreground/50 mb-1.5 block">ID de Medição GA4</label>
+            <input value={gaId} onChange={e => setGaId(e.target.value)} placeholder="G-XXXXXXXXXX" className={inputClass} />
+            <p className="font-body text-xs text-foreground/30 mt-1">Encontre em Google Analytics → Admin → Fluxos de dados → ID de medição</p>
+          </div>
+          <div>
+            <label className="font-body text-xs text-foreground/50 mb-1.5 block">Status</label>
+            <div className={`flex items-center gap-2 px-4 py-3 rounded-lg border ${gaId ? "bg-green-50 border-green-200" : "bg-amber-50 border-amber-200"}`}>
+              <div className={`w-2 h-2 rounded-full ${gaId ? "bg-green-500" : "bg-amber-500"}`} />
+              <span className={`font-body text-xs ${gaId ? "text-green-700" : "text-amber-700"}`}>{gaId ? "Configurado" : "Aguardando ID"}</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label className="font-body text-xs text-foreground/50 mb-1.5 block">URL do Looker Studio / Data Studio (embed)</label>
+          <input value={embedUrl} onChange={e => setEmbedUrl(e.target.value)} placeholder="https://lookerstudio.google.com/embed/reporting/..." className={inputClass} />
+          <p className="font-body text-xs text-foreground/30 mt-1">No Looker Studio, crie um relatório → Compartilhar → Incorporar → Copie a URL do iframe</p>
+        </div>
+
+        <button onClick={saveConfig} className="flex items-center gap-2 bg-gradient-to-r from-[#b8935a] to-[#c9a96e] text-white px-5 py-2.5 rounded-lg text-xs font-medium tracking-[0.15em] uppercase hover:opacity-90">
+          <Save size={14} /> Salvar Configuração
+        </button>
+      </div>
+
+      {/* Script de instalação */}
+      {gaId && (
+        <div className="bg-white rounded-xl border border-[#c9a96e]/10 p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <p className="font-body text-xs tracking-[0.15em] uppercase text-[#c9a96e] font-medium">Script de Rastreamento</p>
+            <button onClick={() => {
+              const script = `<!-- Google Analytics GA4 -->\n<script async src="https://www.googletagmanager.com/gtag/js?id=${gaId}"></script>\n<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', '${gaId}');\n</script>`;
+              navigator.clipboard.writeText(script);
+              toast.success("Script copiado!");
+            }} className="text-xs font-body text-[#c9a96e] hover:underline">Copiar script</button>
+          </div>
+          <div className="bg-[#1c1917] rounded-lg p-4 overflow-x-auto">
+            <pre className="font-mono text-xs text-green-400 whitespace-pre-wrap">{`<!-- Google Analytics GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=${gaId}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '${gaId}'${!issite ? `, {
+    'page_title': document.title,
+    'content_group': 'blog'
+  }` : ""});
+</script>`}</pre>
+          </div>
+          <p className="font-body text-xs text-foreground/30 mt-3">Este script já está instalado automaticamente no site. As métricas começam a ser coletadas imediatamente após a configuração do ID.</p>
+        </div>
+      )}
+
+      {/* Dashboard embed */}
+      {embedUrl ? (
+        <div className="bg-white rounded-xl border border-[#c9a96e]/10 overflow-hidden mb-6">
+          <div className="p-4 border-b border-[#c9a96e]/10 flex items-center justify-between">
+            <p className="font-body text-xs tracking-[0.15em] uppercase text-[#c9a96e] font-medium">Dashboard de Métricas</p>
+            <a href={embedUrl.replace("/embed/", "/").replace("embed/reporting", "reporting")} target="_blank" className="text-xs font-body text-blue-500 hover:underline">Abrir no Looker Studio</a>
+          </div>
+          <iframe src={embedUrl} width="100%" height="600" frameBorder="0" style={{ border: 0 }} allowFullScreen loading="lazy" title={`Analytics ${type}`} />
+        </div>
+      ) : (
+        <div className="bg-white rounded-xl border border-[#c9a96e]/10 p-12 text-center mb-6">
+          <Search size={48} className="text-foreground/10 mx-auto mb-4" />
+          <p className="font-body text-foreground/40 mb-2">Nenhum dashboard configurado</p>
+          <p className="font-body text-xs text-foreground/30 mb-6">Configure a URL do Looker Studio acima para visualizar as métricas aqui</p>
+        </div>
+      )}
+
+      {/* Métricas manuais - placeholder cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        {(issite ? [
+          { label: "Páginas populares", items: ["Home", "Tratamentos", "Resultados", "Contato", "Unidades"] },
+          { label: "Origens de tráfego", items: ["Google Orgânico", "Instagram", "WhatsApp", "Direto", "Facebook"] },
+          { label: "Dispositivos", items: ["Mobile 72%", "Desktop 23%", "Tablet 5%"] },
+          { label: "Métricas chave", items: ["Sessões", "Usuários", "Taxa rejeição", "Duração média", "Páginas/sessão"] },
+        ] : [
+          { label: "Artigos populares", items: ["Quiet Beauty", "Canetas Emagrecedoras", "Queda Capilar", "Bioestimulador vs Preenchimento", "Skinimalism"] },
+          { label: "Categorias", items: ["Bem-estar", "Bioestimulador", "Skincare", "Toxina Botulínica", "Harmonização"] },
+          { label: "Origens do blog", items: ["Google Orgânico", "Instagram Bio", "WhatsApp", "Newsletter", "Direto"] },
+          { label: "Engajamento", items: ["Tempo de leitura", "Scroll depth", "Compartilhamentos", "CTR no CTA", "Retorno"] },
+        ]).map((card, i) => (
+          <div key={i} className="bg-white rounded-xl border border-[#c9a96e]/10 p-5">
+            <p className="font-body text-xs tracking-[0.1em] uppercase text-[#c9a96e] font-medium mb-3">{card.label}</p>
+            <div className="space-y-2">
+              {card.items.map((item, j) => (
+                <div key={j} className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#c9a96e]/30" />
+                  <span className="font-body text-xs text-foreground/50">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* How to setup */}
+      <div className={`rounded-xl border p-5 ${issite ? "bg-blue-50 border-blue-200" : "bg-green-50 border-green-200"}`}>
+        <p className={`font-body text-xs font-medium mb-3 ${issite ? "text-blue-700" : "text-green-700"}`}>Como configurar o dashboard completo</p>
+        <div className={`font-body text-xs space-y-1.5 ${issite ? "text-blue-600/70" : "text-green-600/70"}`}>
+          <p>1. Acesse <strong>analytics.google.com</strong> e crie uma propriedade GA4 para o site</p>
+          <p>2. Copie o <strong>ID de medição</strong> (G-XXXXXXXXXX) e cole acima</p>
+          <p>3. Para o dashboard visual, acesse <strong>lookerstudio.google.com</strong></p>
+          <p>4. Crie um relatório conectado ao Google Analytics</p>
+          <p>5. {issite ? "Adicione métricas: Sessões, Usuários, Páginas/sessão, Origens, Dispositivos" : "Adicione métricas filtradas por /blog/*: Artigos lidos, Tempo de leitura, Origens"}</p>
+          <p>6. Clique em <strong>Compartilhar → Incorporar relatório</strong> e cole a URL acima</p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════
+// GOOGLE REVIEWS SECTION
+// ═══════════════════════════════════════════════════════
+const GOOGLE_REVIEW_LINK = "https://www.google.com/search?hl=en-BR&gl=br&q=Dra+Roberta+Castro+Dermatologia&ludocid=17061125954302208991#lrd=";
+
+function GoogleReviewsSection() {
+  const [reviews, setReviews] = useState<GoogleReview[]>([]);
+  const [showForm, setShowForm] = useState(false);
+  const [showRequest, setShowRequest] = useState(false);
+  const [editing, setEditing] = useState<GoogleReview | null>(null);
+  const [form, setForm] = useState({ author_name: "", rating: 5, text: "", reply: "", review_date: new Date().toISOString().split("T")[0], unit_name: "Chácara Santo Antônio" });
+  const [reqForm, setReqForm] = useState({ name: "", phone: "", unit: "Chácara Santo Antônio", procedure: "" });
+
+  useEffect(() => { load(); }, []);
+  async function load() { const { data } = await supabase.from("google_reviews").select("*").order("sort_order"); if (data) setReviews(data as GoogleReview[]); }
+
+  function openNew() { setEditing(null); setForm({ author_name: "", rating: 5, text: "", reply: "", review_date: new Date().toISOString().split("T")[0], unit_name: "Chácara Santo Antônio" }); setShowForm(true); setShowRequest(false); }
+  function openEdit(r: GoogleReview) { setEditing(r); setForm({ author_name: r.author_name, rating: r.rating, text: r.text, reply: r.reply, review_date: r.review_date, unit_name: r.unit_name }); setShowForm(true); setShowRequest(false); }
+  function closeForm() { setEditing(null); setShowForm(false); setForm({ author_name: "", rating: 5, text: "", reply: "", review_date: "", unit_name: "Chácara Santo Antônio" }); }
+
+  async function save() {
+    if (!form.author_name || !form.text) { toast.error("Preencha nome e texto"); return; }
+    if (editing) { await supabase.from("google_reviews").update(form).eq("id", editing.id); }
+    else { await supabase.from("google_reviews").insert({ ...form, sort_order: reviews.length + 1 }); }
+    toast.success("Salvo!"); closeForm(); load();
+  }
+
+  async function toggle(r: GoogleReview) { await supabase.from("google_reviews").update({ is_visible: !r.is_visible }).eq("id", r.id); load(); }
+  async function remove(id: string) { if (!confirm("Excluir?")) return; await supabase.from("google_reviews").delete().eq("id", id); toast.success("Excluído"); load(); }
+
+  function sendReviewRequest() {
+    if (!reqForm.name || !reqForm.phone) { toast.error("Preencha nome e telefone"); return; }
+    const digits = reqForm.phone.replace(/\D/g, "");
+    const phone = digits.startsWith("55") ? digits : "55" + digits;
+    const msg = `Olá, ${reqForm.name}! Aqui é do time de relacionamento da RP Golden Clinic. Tudo bem? Passando para saber como você está se sentindo após sua visita na nossa unidade ${reqForm.unit}${reqForm.procedure ? " para " + reqForm.procedure : ""}. Como foi sua experiência conosco?`;
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
+    toast.success("WhatsApp aberto");
+    setReqForm({ name: "", phone: "", unit: "Chácara Santo Antônio", procedure: "" });
+    setShowRequest(false);
+  }
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h2 className="font-display text-2xl font-semibold text-foreground">Google Meu Negócio</h2>
+          <p className="font-body text-sm text-foreground/40">{reviews.length} avaliações · Exibidas na página de Unidades</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button onClick={() => { setShowRequest(true); setShowForm(false); }} className="flex items-center gap-2 border border-green-500 text-green-600 px-4 py-2.5 rounded-lg text-xs font-medium hover:bg-green-50">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Solicitar Avaliação
+          </button>
+          <a href={GOOGLE_REVIEW_LINK} target="_blank" className="flex items-center gap-2 border border-blue-500 text-blue-600 px-4 py-2.5 rounded-lg text-xs font-medium hover:bg-blue-50">
+            <Globe size={14} /> Ver no Google
+          </a>
+          <button onClick={openNew} className="flex items-center gap-2 bg-gradient-to-r from-[#b8935a] to-[#c9a96e] text-white px-5 py-2.5 rounded-lg text-xs font-medium tracking-[0.15em] uppercase hover:opacity-90"><Plus size={14} /> Adicionar</button>
+        </div>
+      </div>
+
+      {/* Request review via WhatsApp */}
+      {showRequest && (
+        <div className="bg-green-50 border border-green-200 rounded-xl p-6 mb-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <p className="font-body text-sm font-medium text-green-700">Solicitar avaliação no Google via WhatsApp</p>
+            <button onClick={() => setShowRequest(false)} className="text-green-400"><X size={16} /></button>
+          </div>
+          <p className="font-body text-xs text-green-600/70">O paciente receberá uma mensagem perguntando sobre a experiência. Se positiva, envie o link do Google na sequência.</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div><label className="font-body text-xs text-green-700/70 mb-1 block">Nome do paciente *</label><input value={reqForm.name} onChange={e => setReqForm({ ...reqForm, name: e.target.value })} className={inputClass} /></div>
+            <div><label className="font-body text-xs text-green-700/70 mb-1 block">WhatsApp *</label><input value={reqForm.phone} onChange={e => setReqForm({ ...reqForm, phone: e.target.value })} className={inputClass} /></div>
+          </div>
+          <div><label className="font-body text-xs text-green-700/70 mb-1 block">Procedimento (opcional)</label><input value={reqForm.procedure} onChange={e => setReqForm({ ...reqForm, procedure: e.target.value })} placeholder="Ex: Bioestimuladores, Toxina..." className={inputClass} /></div>
+          <div className="flex gap-3">
+            <button onClick={sendReviewRequest} className="flex items-center gap-2 bg-[#25D366] text-white px-4 py-3 rounded-lg text-xs font-medium">Enviar via WhatsApp</button>
+            <button onClick={() => { navigator.clipboard.writeText(GOOGLE_REVIEW_LINK); toast.success("Link do Google copiado!"); }} className="flex items-center gap-2 border border-blue-300 text-blue-600 px-4 py-3 rounded-lg text-xs font-medium">Copiar link Google</button>
+          </div>
+        </div>
+      )}
+
+      {/* Add/Edit form */}
+      {showForm && (
+        <div className="bg-white rounded-xl border border-[#c9a96e]/10 p-6 mb-6 space-y-4">
+          <p className="font-body text-xs tracking-[0.15em] uppercase text-[#c9a96e] font-medium">{editing ? "Editar" : "Nova"} avaliação</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div><label className="font-body text-xs text-foreground/50 mb-1 block">Nome do autor *</label><input value={form.author_name} onChange={e => setForm({ ...form, author_name: e.target.value })} className={inputClass} /></div>
+            <div className="grid grid-cols-2 gap-4">
+              <div><label className="font-body text-xs text-foreground/50 mb-1 block">Estrelas</label><select value={form.rating} onChange={e => setForm({ ...form, rating: parseInt(e.target.value) })} className={inputClass}><option value={5}>5 estrelas</option><option value={4}>4 estrelas</option></select></div>
+              <div><label className="font-body text-xs text-foreground/50 mb-1 block">Data</label><input type="date" value={form.review_date} onChange={e => setForm({ ...form, review_date: e.target.value })} className={inputClass} /></div>
+            </div>
+          </div>
+          <div><label className="font-body text-xs text-foreground/50 mb-1 block">Texto da avaliação *</label><textarea value={form.text} onChange={e => setForm({ ...form, text: e.target.value })} rows={3} className={inputClass + " resize-none"} /></div>
+          <div><label className="font-body text-xs text-foreground/50 mb-1 block">Resposta da clínica (opcional)</label><textarea value={form.reply} onChange={e => setForm({ ...form, reply: e.target.value })} rows={2} className={inputClass + " resize-none"} /></div>
+          <div className="flex gap-3">
+            <button onClick={save} className="bg-[#c9a96e] text-white px-4 py-3 rounded-lg text-xs font-medium"><Save size={14} /></button>
+            <button onClick={closeForm} className="text-foreground/40 text-xs font-body">Cancelar</button>
+          </div>
+        </div>
+      )}
+
+      {/* Reviews list */}
+      <div className="space-y-3">
+        {reviews.map(r => (
+          <div key={r.id} className={`bg-white rounded-xl border p-5 flex items-start gap-4 ${r.is_visible ? "border-[#c9a96e]/10" : "border-red-200 opacity-50"}`}>
+            <div className="w-10 h-10 rounded-full bg-[#c9a96e]/10 flex items-center justify-center text-[#c9a96e] font-display text-sm font-semibold flex-shrink-0">
+              {r.author_name.charAt(0)}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <p className="font-display text-sm font-semibold text-foreground">{r.author_name}</p>
+                <div className="flex">{[...Array(r.rating)].map((_, i) => <Star key={i} size={11} className="text-yellow-500 fill-yellow-500" />)}</div>
+                <span className="text-xs font-body text-foreground/30">{r.review_date}</span>
+              </div>
+              <p className="font-body text-xs text-foreground/60 leading-relaxed">"{r.text}"</p>
+              {r.reply && <p className="font-body text-xs text-[#c9a96e] mt-2 italic">Resposta: {r.reply}</p>}
+            </div>
+            <div className="flex items-center gap-1 flex-shrink-0">
+              <button onClick={() => toggle(r)} className="p-2 hover:bg-[#c9a96e]/10 rounded-lg">{r.is_visible ? <EyeOff size={14} className="text-foreground/40" /> : <Eye size={14} className="text-green-500" />}</button>
+              <button onClick={() => openEdit(r)} className="p-2 hover:bg-[#c9a96e]/10 rounded-lg"><Edit3 size={14} className="text-[#c9a96e]" /></button>
+              <button onClick={() => remove(r.id)} className="p-2 hover:bg-red-50 rounded-lg"><Trash2 size={14} className="text-red-400" /></button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Tips */}
+      <div className="mt-6 bg-blue-50 rounded-xl border border-blue-200 p-5">
+        <p className="font-body text-xs font-medium text-blue-700 mb-2">Fluxo de solicitação de avaliação</p>
+        <div className="font-body text-xs text-blue-600/70 space-y-1">
+          <p>1. Clique em "Solicitar Avaliação" e preencha os dados do paciente</p>
+          <p>2. O WhatsApp abre com mensagem perguntando sobre a experiência</p>
+          <p>3. Se o paciente responder positivamente, envie o link do Google (botão "Copiar link Google")</p>
+          <p>4. Nunca envie o link na primeira mensagem — sempre filtre a satisfação antes</p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════
+// LEADS SECTION
+// ═══════════════════════════════════════════════════════
+function LeadsSection() {
+  const [items, setItems] = useState<Lead[]>([]);
+  useEffect(() => { load(); }, []);
+  async function load() { const { data } = await supabase.from("site_leads").select("*").order("created_at", { ascending: false }); if (data) setItems(data); }
+  async function remove(id: string) { if(!confirm("Excluir?")) return; await supabase.from("site_leads").delete().eq("id", id); toast.success("Excluido"); load(); }
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h2 className="font-display text-2xl font-semibold text-foreground">Leads do Site</h2>
+          <p className="font-body text-sm text-foreground/40">{items.length} contatos recebidos</p>
+        </div>
+      </div>
+      {items.length === 0 ? (
+        <div className="bg-white rounded-xl border border-[#c9a96e]/10 p-12 text-center">
+          <Inbox size={48} className="text-foreground/10 mx-auto mb-4" />
+          <p className="font-body text-foreground/40">Nenhum contato recebido ainda</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {items.map(l => (
+            <div key={l.id} className="bg-white rounded-xl border border-[#c9a96e]/10 p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <p className="font-display text-sm font-semibold text-foreground">{l.name}</p>
+                    <span className="text-xs font-body bg-[#c9a96e]/10 text-[#c9a96e] px-2 py-0.5 rounded-full">{l.service}</span>
+                    <span className="text-xs font-body text-foreground/30">{l.source}</span>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 font-body text-xs text-foreground/50">
+                    <span>Tel: {l.phone}</span>
+                    <span>Email: {l.email || "—"}</span>
+                    <span>{new Date(l.created_at).toLocaleDateString("pt-BR")} {new Date(l.created_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
+                  </div>
+                  {l.message && <p className="font-body text-xs text-foreground/40 mt-2 italic">"{l.message}"</p>}
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <a href={`https://wa.me/55${l.phone.replace(/\D/g,"")}`} target="_blank" rel="noopener noreferrer" className="p-2 hover:bg-green-50 rounded-lg" title="Abrir WhatsApp">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  </a>
+                  <button onClick={() => remove(l.id)} className="p-2 hover:bg-red-50 rounded-lg"><Trash2 size={14} className="text-red-400" /></button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </motion.div>
   );
 }
@@ -1087,25 +1895,10 @@ function AIBlogGenerator({ onBack, onArticleGenerated }: { onBack: () => void; o
   const [topic, setTopic] = useState("");
   const [keywords, setKeywords] = useState("");
   const [generating, setGenerating] = useState(false);
-  const [apiKey, setApiKey] = useState(localStorage.getItem("rp_claude_key") || "");
-  const [geminiKey, setGeminiKey] = useState(localStorage.getItem("rp_gemini_key") || "");
-  const [showKeyInput, setShowKeyInput] = useState(!localStorage.getItem("rp_claude_key"));
-  const [showGeminiKeyInput, setShowGeminiKeyInput] = useState(!localStorage.getItem("rp_gemini_key"));
   const [imgPrompt, setImgPrompt] = useState("");
   const [imgStyle, setImgStyle] = useState("clinical");
   const [generatingImg, setGeneratingImg] = useState(false);
   const [generatedImages, setGeneratedImages] = useState<string[]>([]);
-
-  function saveKey() {
-    localStorage.setItem("rp_claude_key", apiKey);
-    setShowKeyInput(false);
-    toast.success("Chave Claude salva");
-  }
-  function saveGeminiKey() {
-    localStorage.setItem("rp_gemini_key", geminiKey);
-    setShowGeminiKeyInput(false);
-    toast.success("Chave Gemini salva");
-  }
 
   const imgStyles: Record<string, string> = {
     clinical: "Foto profissional de clinica dermatologica premium, ambiente sofisticado com tons dourados e creme, iluminacao suave e quente",
@@ -1124,7 +1917,6 @@ function AIBlogGenerator({ onBack, onArticleGenerated }: { onBack: () => void; o
 
   async function generateImage() {
     if (!imgPrompt) { toast.error("Descreva a imagem desejada"); return; }
-    if (!geminiKey) { toast.error("Configure a chave da API Gemini"); setShowGeminiKeyInput(true); return; }
 
     setGeneratingImg(true);
     setGeneratedImages([]);
@@ -1135,21 +1927,11 @@ Tipografia serif elegante estilo Cormorant Garamond.
 Estetica premium, sofisticada, dermatologia estetica de alto padrao.
 Sem texto na imagem. Alta resolucao, aspecto ratio 16:9.`;
 
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${geminiKey}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: `Generate an image: ${brandPrompt}` }] }],
-          generationConfig: { responseModalities: ["TEXT", "IMAGE"] },
-        }),
+      const data: any = await geminiImage({
+        contents: [{ parts: [{ text: `Generate an image: ${brandPrompt}` }] }],
+        generationConfig: { responseModalities: ["TEXT", "IMAGE"] },
       });
 
-      if (!res.ok) {
-        const err = await res.text();
-        throw new Error(err.substring(0, 150));
-      }
-
-      const data = await res.json();
       const images: string[] = [];
 
       if (data.candidates) {
@@ -1193,7 +1975,6 @@ Sem texto na imagem. Alta resolucao, aspecto ratio 16:9.`;
 
   async function generate() {
     if (!topic) { toast.error("Informe o tema do artigo"); return; }
-    if (!apiKey) { toast.error("Configure a chave da API Claude"); setShowKeyInput(true); return; }
 
     setGenerating(true);
     try {
@@ -1211,30 +1992,9 @@ O artigo deve:
 Responda APENAS em JSON valido com esta estrutura:
 {"title":"titulo do artigo","slug":"slug-do-artigo","excerpt":"resumo em 2 frases","content":"conteudo completo em Markdown","category":"categoria (Toxina Botulinica, Bioestimulador, Preenchimento, Harmonizacao, Skincare ou Bem-estar)","read_time":5,"meta_description":"meta description para SEO","keyword":"palavra-chave principal","author":"Dra. Roberta Castro Peres"}`;
 
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apiKey,
-          "anthropic-version": "2023-06-01",
-          "anthropic-dangerous-direct-browser-access": "true",
-        },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 4096,
-          messages: [{ role: "user", content: prompt }],
-        }),
-      });
-
-      if (!res.ok) {
-        const err = await res.text();
-        throw new Error(err);
-      }
-
-      const data = await res.json();
+      const data = await claudeMessage({ messages: [{ role: "user", content: prompt }] });
       const text = data.content[0].text;
 
-      // Extract JSON from response
       const jsonMatch = text.match(/\{[\s\S]*\}/);
       if (!jsonMatch) throw new Error("Resposta invalida da IA");
 
@@ -1275,18 +2035,6 @@ Responda APENAS em JSON valido com esta estrutura:
               <h2 className="font-display text-2xl font-semibold text-foreground mb-2">Gerador de Imagens com IA</h2>
               <p className="font-body text-sm text-foreground/50">Crie imagens para o blog seguindo a identidade visual da Golden Clinic.</p>
             </div>
-
-            {/* Gemini Key */}
-            {showGeminiKeyInput && (
-              <div className="bg-purple-50 border border-purple-200 rounded-xl p-6 mb-6">
-                <p className="font-body text-xs text-purple-600 font-medium mb-3">Chave da API Google Gemini</p>
-                <div className="flex gap-2">
-                  <input value={geminiKey} onChange={e=>setGeminiKey(e.target.value)} placeholder="AIza..." className={inputClass+" flex-1"} type="password"/>
-                  <button onClick={saveGeminiKey} className="bg-purple-600 text-white px-4 py-2 rounded-lg text-xs font-medium">Salvar</button>
-                </div>
-                <p className="font-body text-xs text-purple-400 mt-2">Obtenha em aistudio.google.com → Get API Key. Gratuito.</p>
-              </div>
-            )}
 
             {/* How to use */}
             <div className="bg-white rounded-xl border border-[#c9a96e]/10 p-6 mb-6">
@@ -1339,9 +2087,6 @@ Responda APENAS em JSON valido com esta estrutura:
                 className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white py-4 rounded-xl text-sm font-medium hover:opacity-90 disabled:opacity-50">
                 {generatingImg ? <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"/> Gerando imagem...</> : <><ImageIcon size={18}/> Gerar Imagem com IA</>}
               </button>
-              {!showGeminiKeyInput && (
-                <button onClick={()=>setShowGeminiKeyInput(true)} className="w-full text-center text-xs font-body text-foreground/30 hover:text-purple-500">Alterar chave Gemini</button>
-              )}
             </div>
 
             {/* Generated images */}
@@ -1413,18 +2158,6 @@ Responda APENAS em JSON valido com esta estrutura:
           </div>
         </div>
 
-        {/* API Key config */}
-        {showKeyInput && (
-          <div className="bg-purple-50 border border-purple-200 rounded-xl p-6 mb-6">
-            <p className="font-body text-xs text-purple-600 font-medium mb-3">Chave da API Claude (Anthropic)</p>
-            <div className="flex gap-2">
-              <input value={apiKey} onChange={e => setApiKey(e.target.value)} placeholder="sk-ant-..." className={inputClass + " flex-1"} type="password" />
-              <button onClick={saveKey} className="bg-purple-600 text-white px-4 py-2 rounded-lg text-xs font-medium">Salvar</button>
-            </div>
-            <p className="font-body text-xs text-purple-400 mt-2">Obtenha em console.anthropic.com → API Keys. A chave fica salva apenas no seu navegador.</p>
-          </div>
-        )}
-
         <div className="bg-white rounded-xl border border-[#c9a96e]/10 p-6 space-y-5">
           <div>
             <label className="font-body text-sm font-medium text-foreground mb-2 block">Tema do artigo</label>
@@ -1443,12 +2176,6 @@ Responda APENAS em JSON valido com esta estrutura:
               <><Sparkles size={18} /> Gerar Artigo com IA</>
             )}
           </button>
-
-          {!showKeyInput && (
-            <button onClick={() => setShowKeyInput(true)} className="w-full text-center text-xs font-body text-foreground/30 hover:text-purple-500">
-              Alterar chave da API
-            </button>
-          )}
         </div>
         </>)}
       </div>
@@ -1561,29 +2288,52 @@ function BlogSection({ uploading, upload }: { uploading: boolean; upload: (f:Fil
     </motion.div>
   );
 
+  const [statusFilter, setStatusFilter] = useState("all");
+  const filteredArticles = statusFilter === "all" ? articles : articles.filter(a => a.status === statusFilter);
+  const draftCount = articles.filter(a => a.status === "draft").length;
+  const scheduledCount = articles.filter(a => a.status === "scheduled").length;
+  const publishedCount = articles.filter(a => a.status === "published").length;
+
   return (
     <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6">
         <div><h2 className="font-display text-2xl font-semibold text-foreground">Artigos do Blog</h2><p className="font-body text-sm text-foreground/40">{articles.length} artigos</p></div>
         <div className="flex items-center gap-3">
           <button onClick={()=>setView("ai")} className="flex items-center gap-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white px-5 py-3 rounded-lg text-xs font-medium tracking-[0.15em] uppercase hover:opacity-90"><Sparkles size={16}/> IA Blog</button>
           <button onClick={handleNew} className="flex items-center gap-2 bg-gradient-to-r from-[#b8935a] to-[#c9a96e] text-white px-5 py-3 rounded-lg text-xs font-medium tracking-[0.15em] uppercase hover:opacity-90"><Plus size={16}/> Novo Artigo</button>
         </div>
       </div>
-      {articles.length===0 ? (
-        <div className="bg-white rounded-xl border border-[#c9a96e]/10 p-12 text-center"><FileText size={48} className="text-foreground/10 mx-auto mb-4"/><p className="font-body text-foreground/40 mb-4">Nenhum artigo</p><button onClick={handleNew} className="text-[#c9a96e] font-body text-sm">Criar primeiro artigo</button></div>
+
+      {/* Status filter */}
+      <div className="flex gap-2 mb-6">
+        {[
+          { key: "all", label: `Todos (${articles.length})`, color: "bg-foreground/5 text-foreground/60" },
+          { key: "published", label: `Publicados (${publishedCount})`, color: "bg-green-50 text-green-600 border-green-200" },
+          { key: "draft", label: `Rascunhos (${draftCount})`, color: "bg-amber-50 text-amber-600 border-amber-200" },
+          { key: "scheduled", label: `Agendados (${scheduledCount})`, color: "bg-blue-50 text-blue-600 border-blue-200" },
+        ].map(f => (
+          <button key={f.key} onClick={() => setStatusFilter(f.key)}
+            className={`px-4 py-2 rounded-full text-xs font-body font-medium border transition-all ${statusFilter === f.key ? f.color + " border-current" : "border-transparent text-foreground/30 hover:text-foreground/50"}`}>
+            {f.label}
+          </button>
+        ))}
+      </div>
+
+      {filteredArticles.length===0 ? (
+        <div className="bg-white rounded-xl border border-[#c9a96e]/10 p-12 text-center"><FileText size={48} className="text-foreground/10 mx-auto mb-4"/><p className="font-body text-foreground/40 mb-4">{statusFilter === "all" ? "Nenhum artigo" : `Nenhum artigo com status "${statusFilter}"`}</p><button onClick={handleNew} className="text-[#c9a96e] font-body text-sm">Criar artigo</button></div>
       ) : (
         <div className="space-y-3">
-          {articles.map(a=>(
-            <div key={a.id} className="bg-white rounded-xl border border-[#c9a96e]/10 p-5 flex items-center gap-4">
+          {filteredArticles.map(a=>(
+            <div key={a.id} className={`rounded-xl border p-5 flex items-center gap-4 ${a.status==="draft"?"bg-amber-50/30 border-amber-200/50":a.status==="scheduled"?"bg-blue-50/30 border-blue-200/50":"bg-white border-[#c9a96e]/10"}`}>
               <div className="w-16 h-16 rounded-lg bg-[#e8e0d6] overflow-hidden flex-shrink-0">{a.image_url?<img src={a.image_url} alt="" className="w-full h-full object-cover"/>:<div className="w-full h-full flex items-center justify-center"><ImageIcon size={20} className="text-[#c9a96e]/30"/></div>}</div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-display text-sm font-semibold text-foreground truncate">{a.title}</h3>
                 <div className="flex items-center gap-3 mt-1">
                   <span className="text-xs font-body text-foreground/40">{a.category}</span>
-                  <span className={`text-xs font-body px-2 py-0.5 rounded-full ${a.status==="published"?"bg-green-50 text-green-600":"bg-amber-50 text-amber-600"}`}>{a.status==="published"?"Publicado":"Rascunho"}</span>
+                  <span className={`text-xs font-body px-2 py-0.5 rounded-full ${a.status==="published"?"bg-green-50 text-green-600":a.status==="scheduled"?"bg-blue-50 text-blue-600":"bg-amber-50 text-amber-600"}`}>{a.status==="published"?"Publicado":a.status==="scheduled"?"Agendado":"Rascunho"}</span>
                   <span className="text-xs font-body text-foreground/30">{new Date(a.created_at).toLocaleDateString("pt-BR")}</span>
                   {a.featured && <Star size={12} className="text-[#c9a96e]" fill="currentColor"/>}
+                  {(a as any).scheduled_at && <span className="text-xs font-body text-blue-500">Publica em {new Date((a as any).scheduled_at).toLocaleDateString("pt-BR")}</span>}
                 </div>
               </div>
               <button onClick={()=>handleToggle(a)} className="p-2 rounded-lg hover:bg-[#c9a96e]/10">{a.status==="published"?<EyeOff size={16} className="text-foreground/40"/>:<Eye size={16} className="text-green-500"/>}</button>

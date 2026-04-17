@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
 
 // Lazy-loaded pages (code splitting)
 const SedeChacaraSantoAntonio = lazy(() => import("./pages/SedeChacaraSantoAntonio.tsx"));
@@ -73,7 +74,7 @@ const App = () => (
           <Route path="/golden-friends/quiz/:type" element={<QuizPage />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogArticle />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/politica-de-privacidade" element={<PoliticaPrivacidade />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

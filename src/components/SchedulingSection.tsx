@@ -3,8 +3,10 @@ import { motion } from "framer-motion";
 import { User, Mail, Phone, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 import treatmentImg from "@/assets/treatment.jpg";
+import { supabase } from "@/lib/supabase";
 
 const WHATSAPP_URL = "https://wa.me/5511932110460";
+const CONTACT_EMAILS = ["contato@drarobertacastro.com.br", "roberta_castro@outlook.com"];
 
 const serviceOptions = [
   "Bioestimuladores de Colágeno",
@@ -22,15 +24,55 @@ const SchedulingSection = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [sending, setSending] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.phone || !form.service) {
       toast.error("Por favor, preencha os campos obrigatórios.");
       return;
     }
+    setSending(true);
+
+    // Salvar lead no Supabase
+    await supabase.from("site_leads").insert({
+      name: form.name, phone: form.phone, email: form.email,
+      service: form.service, message: form.message, source: "home"
+    });
+
+    // Enviar e-mail via mailto (abre no cliente de e-mail como fallback)
+    const emailSubject = "Formulário Home do Site - RP Golden Clinic";
+    const emailBody = `Novo contato pelo formulário do site:
+
+Nome: ${form.name}
+WhatsApp: ${form.phone}
+E-mail: ${form.email || "Não informado"}
+Tratamento: ${form.service}
+Mensagem: ${form.message || "Nenhuma"}
+
+---
+Enviado automaticamente pelo site RP Golden Clinic`;
+
+    // Enviar via Supabase Edge Function ou mailto
+    try {
+      // Tenta enviar via fetch para um endpoint de e-mail (se configurado)
+      await fetch(`https://bggqklkeqdmkefvrjuka.supabase.co/functions/v1/send-email`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJnZ3FrbGtlcWRta2VmdnJqdWthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5ODIzOTYsImV4cCI6MjA5MDU1ODM5Nn0.mV0Hq6vOgyEKZQk5379_UoBU96vnfWl-VCFgT0DHiZs` },
+        body: JSON.stringify({ to: CONTACT_EMAILS.join(","), subject: emailSubject, body: emailBody })
+      });
+    } catch {
+      // Fallback: abre mailto
+      window.open(`mailto:${CONTACT_EMAILS.join(",")}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`);
+    }
+
+    // Redirecionar para WhatsApp
     const msg = `Olá, Dra. Roberta! Meu nome é ${form.name}. Gostaria de agendar: ${form.service}. ${form.message ? "Obs: " + form.message : ""}`;
     window.open(`${WHATSAPP_URL}?text=${encodeURIComponent(msg)}`, "_blank");
-    toast.success("Redirecionando para o WhatsApp...");
+
+    toast.success("Contato enviado com sucesso!");
+    setForm({ name: "", email: "", phone: "", service: "", message: "" });
+    setSending(false);
   };
 
   const inputClass =

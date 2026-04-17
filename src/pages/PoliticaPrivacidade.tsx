@@ -29,8 +29,12 @@ export default function PoliticaPrivacidade() {
       } else if (trimmed === "---") {
         elements.push(<hr key={i} className="my-6 border-[#c9a96e]/20" />);
       } else {
-        const html = trimmed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        elements.push(<p key={i} className="font-body text-sm font-light text-foreground/70 leading-relaxed mb-2" dangerouslySetInnerHTML={{ __html: html }} />);
+        const parts = trimmed.split(/(\*\*.*?\*\*)/g).map((part, j) =>
+          part.startsWith("**") && part.endsWith("**")
+            ? <strong key={j}>{part.slice(2, -2)}</strong>
+            : <span key={j}>{part}</span>
+        );
+        elements.push(<p key={i} className="font-body text-sm font-light text-foreground/70 leading-relaxed mb-2">{parts}</p>);
       }
     });
     return elements;

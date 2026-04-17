@@ -1,25 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Lock, User } from "lucide-react";
+import { Lock, Mail } from "lucide-react";
 import { toast } from "sonner";
-
-const ADMIN_USER = "admin";
-const ADMIN_PASS = "golden2025";
+import { supabase } from "@/lib/supabase";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
-  const [user, setUser] = useState("");
+  const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function handleLogin(e: React.FormEvent) {
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) navigate("/admin", { replace: true });
+    });
+  }, [navigate]);
+
+  async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-    if (user === ADMIN_USER && pass === ADMIN_PASS) {
-      sessionStorage.setItem("rp_admin", "true");
-      navigate("/admin");
-    } else {
-      toast.error("Credenciais incorretas");
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
+    setLoading(false);
+    if (error) {
+      toast.error("Credenciais inválidas");
+      return;
     }
+    navigate("/admin", { replace: true });
   }
 
   return (
@@ -40,11 +47,14 @@ export default function AdminLogin() {
 
         <form onSubmit={handleLogin} className="bg-white/5 border border-white/10 rounded-2xl p-8 space-y-5">
           <div className="relative">
-            <User size={15} className="absolute left-4 top-4 text-primary-foreground/30" />
+            <Mail size={15} className="absolute left-4 top-4 text-primary-foreground/30" />
             <input
-              value={user}
-              onChange={(e) => setUser(e.target.value)}
-              placeholder="Usuario"
+              type="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="E-mail"
               className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3.5 pl-11 font-body text-sm text-primary-foreground placeholder:text-primary-foreground/30 focus:outline-none focus:ring-2 focus:ring-[#c9a96e]/40"
             />
           </div>
@@ -52,6 +62,8 @@ export default function AdminLogin() {
             <Lock size={15} className="absolute left-4 top-4 text-primary-foreground/30" />
             <input
               type="password"
+              autoComplete="current-password"
+              required
               value={pass}
               onChange={(e) => setPass(e.target.value)}
               placeholder="Senha"
@@ -60,9 +72,10 @@ export default function AdminLogin() {
           </div>
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-[#b8935a] to-[#c9a96e] text-white py-3.5 rounded-lg text-xs font-medium tracking-[0.2em] uppercase hover:opacity-90 transition-opacity"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-[#b8935a] to-[#c9a96e] text-white py-3.5 rounded-lg text-xs font-medium tracking-[0.2em] uppercase hover:opacity-90 transition-opacity disabled:opacity-50"
           >
-            Entrar
+            {loading ? "Entrando..." : "Entrar"}
           </button>
         </form>
       </motion.div>

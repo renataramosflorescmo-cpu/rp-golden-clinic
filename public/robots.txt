@@ -30,4 +30,4 @@ Allow: /
 
 Disallow: /admin/
 
-Sitemap: https://express-my-value.vercel.app/sitemap.xml
+Sitemap: https://rp-golden-clinic.pages.dev/sitemap.xml

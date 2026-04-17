@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { MapPin, Clock, Phone, ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { MapPin, Clock, Phone, ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
@@ -34,6 +35,13 @@ const schedule = [
 ];
 
 const SedeChacaraSantoAntonio = () => {
+  const [googleReviews, setGoogleReviews] = useState<any[]>([]);
+  const [reviewIdx, setReviewIdx] = useState(0);
+  useEffect(() => {
+    supabase.from("google_reviews").select("*").eq("is_visible", true).order("sort_order").then(({ data }) => {
+      if (data && data.length > 0) setGoogleReviews(data);
+    });
+  }, []);
   const [currentImage, setCurrentImage] = useState(0);
 
   const next = () => setCurrentImage((p) => (p + 1) % clinicImages.length);
@@ -169,6 +177,79 @@ const SedeChacaraSantoAntonio = () => {
           </div>
         </div>
       </section>
+
+      {/* Google Reviews Carousel */}
+      {googleReviews.length > 0 && (
+        <section className="section-padding bg-white">
+          <div className="max-w-5xl mx-auto">
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#4285F4" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#34A853" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59A14.5 14.5 0 019.5 24c0-1.59.28-3.14.76-4.59l-7.98-6.19A23.93 23.93 0 000 24c0 3.77.9 7.33 2.44 10.48l8.09-5.89z"/><path fill="#EA4335" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                <p className="font-body text-xs tracking-[0.3em] uppercase text-primary">Avaliações Google</p>
+              </div>
+              <h2 className="font-display text-3xl font-semibold text-foreground">O que dizem nossos pacientes</h2>
+            </motion.div>
+
+            <div className="relative">
+              <AnimatePresence mode="wait">
+                <motion.div key={reviewIdx} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.3 }}
+                  className="bg-card rounded-xl border border-border/50 p-8 md:p-10 max-w-2xl mx-auto text-center">
+                  <div className="flex justify-center gap-1 mb-4">
+                    {[...Array(googleReviews[reviewIdx]?.rating || 5)].map((_, i) => (
+                      <Star key={i} size={18} className="text-yellow-500 fill-yellow-500" />
+                    ))}
+                  </div>
+                  <p className="font-body text-base font-light text-foreground/70 leading-relaxed italic mb-6">
+                    "{googleReviews[reviewIdx]?.text}"
+                  </p>
+                  {googleReviews[reviewIdx]?.reply && (
+                    <p className="font-body text-xs text-[#c9a96e] italic mb-4">
+                      Resposta da RP Golden Clinic: {googleReviews[reviewIdx].reply}
+                    </p>
+                  )}
+                  <div className="flex items-center justify-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#b8935a] to-[#c9a96e] flex items-center justify-center text-white font-display text-sm font-semibold">
+                      {googleReviews[reviewIdx]?.author_name?.charAt(0) || "P"}
+                    </div>
+                    <div>
+                      <p className="font-body text-sm font-medium text-foreground">{googleReviews[reviewIdx]?.author_name}</p>
+                      <p className="font-body text-xs text-foreground/40">{googleReviews[reviewIdx]?.review_date ? new Date(googleReviews[reviewIdx].review_date).toLocaleDateString("pt-BR") : ""}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+              {googleReviews.length > 1 && (
+                <>
+                  <button onClick={() => setReviewIdx((i) => (i - 1 + googleReviews.length) % googleReviews.length)}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-border/50 flex items-center justify-center hover:bg-card transition-colors shadow-sm">
+                    <ChevronLeft size={18} className="text-foreground/40" />
+                  </button>
+                  <button onClick={() => setReviewIdx((i) => (i + 1) % googleReviews.length)}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-border/50 flex items-center justify-center hover:bg-card transition-colors shadow-sm">
+                    <ChevronRight size={18} className="text-foreground/40" />
+                  </button>
+                </>
+              )}
+
+              {/* Dots */}
+              <div className="flex justify-center gap-2 mt-6">
+                {googleReviews.map((_, i) => (
+                  <button key={i} onClick={() => setReviewIdx(i)}
+                    className={`w-2 h-2 rounded-full transition-all ${i === reviewIdx ? "bg-[#c9a96e] w-6" : "bg-foreground/10"}`} />
+                ))}
+              </div>
+            </div>
+
+            <div className="text-center mt-8">
+              <a href="https://www.google.com/search?hl=en-BR&gl=br&q=Dra+Roberta+Castro+Dermatologia&ludocid=17061125954302208991#lrd=" target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 border border-[#c9a96e]/30 text-[#c9a96e] px-6 py-3 rounded-lg text-xs font-body font-medium hover:bg-[#c9a96e]/5 transition-colors">
+                Ver todas as avaliações no Google
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
 
       <Footer />
       <WhatsAppFAB />
