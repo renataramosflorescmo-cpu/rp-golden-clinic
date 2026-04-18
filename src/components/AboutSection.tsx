@@ -20,7 +20,7 @@ const AboutSection = () => {
           >
             <p className="font-body text-xs tracking-[0.3em] uppercase text-primary mb-3">Sobre</p>
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-foreground mb-6 leading-tight">
-              {about?.name || "Dra Roberta Castro"}
+              {about?.name || "Dra. Roberta Castro"}
             </h2>
             <div className="w-12 h-px bg-accent mb-8" />
 
@@ -58,7 +58,7 @@ const AboutSection = () => {
             <div className="relative">
               <img
                 src={beautyImg}
-                alt="Dra Roberta Castro"
+                alt="Dra. Roberta Castro Peres, dermatologista CRM 160891 - RP Golden Clinic"
                 loading="lazy"
                 className="relative z-10 w-auto h-[550px] md:h-[680px] object-contain drop-shadow-lg"
               />

@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { User, Mail, Phone, Shield, ChevronRight, Check, Heart, Star, ArrowRight } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
+import SEO from "@/components/SEO";
 
 const WHATSAPP_BASE = "https://wa.me/5511932110460";
 const WHATSAPP_AGENDAR = `${WHATSAPP_BASE}?text=${encodeURIComponent("Olá, Dra. Roberta! Fui indicada pelo programa Golden Friends e gostaria de agendar minha avaliação estética.")}`;
@@ -279,6 +280,11 @@ export default function GoldenFriends() {
 
   return (
     <div className="min-h-screen bg-[#faf7f4]">
+      <SEO
+        title="Golden Friends | Programa de Indicação RP Golden Clinic"
+        description="Programa Golden Friends: indique amigas para a RP Golden Clinic da Dra. Roberta Castro e ganhe benefícios exclusivos. Faça o quiz estético personalizado por faixa etária."
+        path="/golden-friends"
+      />
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#faf7f4]/90 backdrop-blur-md border-b border-[#c9a96e]/20">
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">

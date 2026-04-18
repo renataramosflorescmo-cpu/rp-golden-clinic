@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
+import SEO from "@/components/SEO";
 
 const stats = [
   { icon: TrendingUp, metric: "95%", title: "Melhora Visível", desc: "Pacientes com melhora significativa nas primeiras sessões." },
@@ -40,6 +41,11 @@ const Resultados = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Resultados | RP Golden Clinic"
+        description="Veja resultados reais dos tratamentos realizados pela Dra. Roberta Castro Peres, CRM 160891, na RP Golden Clinic em São Paulo. Antes e depois de bioestimuladores, preenchimento e harmonização facial."
+        path="/resultados"
+      />
       <Navbar />
 
       {/* Stats Section */}

@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
+import SEO from "@/components/SEO";
 
 import clinicReception from "@/assets/clinic-reception.jpg";
 import clinicInterior from "@/assets/clinic-interior-2.jpg";
@@ -49,6 +50,35 @@ const SedeChacaraSantoAntonio = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Sede Chácara Santo Antônio | RP Golden Clinic"
+        description="Clínica de dermatologia estética da Dra. Roberta Castro, CRM 160891, na Rua Luís Correia de Melo, 92 - Chácara Santo Antônio, São Paulo. Segunda a sexta 9h-19h e sábado 9h-13h."
+        path="/sede-chacara-santo-antonio"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": ["MedicalClinic", "LocalBusiness"],
+          name: "RP Golden Clinic - Sede Chácara Santo Antônio",
+          image: "https://rp-golden-clinic.pages.dev/logo-rp.png",
+          url: "https://rp-golden-clinic.pages.dev/sede-chacara-santo-antonio",
+          telephone: "+55-11-93211-0460",
+          priceRange: "$$$",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Rua Luís Correia de Melo, 92",
+            addressLocality: "São Paulo",
+            addressRegion: "SP",
+            postalCode: "04726-220",
+            addressCountry: "BR",
+          },
+          geo: { "@type": "GeoCoordinates", latitude: -23.6478, longitude: -46.6978 },
+          openingHoursSpecification: [
+            { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday"], opens: "09:00", closes: "19:00" },
+            { "@type": "OpeningHoursSpecification", dayOfWeek: "Friday", opens: "09:00", closes: "18:00" },
+            { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "09:00", closes: "13:00" },
+          ],
+          medicalSpecialty: "Dermatology",
+        }}
+      />
       <Navbar />
 
       <section className="pt-28 pb-20 px-6">

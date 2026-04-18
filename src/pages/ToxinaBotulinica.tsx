@@ -4,6 +4,7 @@ import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
+import SEO, { medicalProcedureSchema } from "@/components/SEO";
 import toxinaHero from "@/assets/toxina-hero.jpg";
 
 const WHATSAPP_URL =
@@ -40,12 +41,24 @@ const ToxinaBotulinica = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Toxina Botulínica em São Paulo | Botox na RP Golden Clinic"
+        description="Aplicação de toxina botulínica (Botox) com a Dra. Roberta Castro, CRM 160891, em São Paulo. Reduz rugas, previne sinais de expressão e trata hiperidrose. Agende sua avaliação."
+        path="/tratamentos/toxina-botulinica"
+        schema={medicalProcedureSchema({
+          name: "Toxina Botulínica (Botox)",
+          description: "Aplicação injetável de toxina botulínica para suavização de rugas dinâmicas, prevenção de linhas de expressão e tratamento de hiperidrose.",
+          path: "/tratamentos/toxina-botulinica",
+          bodyLocation: "face, axilas, mãos, pés",
+          followup: "Evitar esfregar a área tratada e exercícios intensos nas primeiras 24 horas.",
+        })}
+      />
       <Navbar />
 
       {/* Hero */}
       <section className="relative h-[70vh] min-h-[500px] flex items-center">
         <div className="absolute inset-0">
-          <img src={toxinaHero} alt="Toxina Botulínica" className="w-full h-full object-cover" />
+          <img src={toxinaHero} alt="Toxina Botulínica em São Paulo - RP Golden Clinic" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/60 to-transparent" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">

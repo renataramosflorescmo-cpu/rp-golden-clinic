@@ -2,6 +2,7 @@ import { Mail, MapPin, Instagram, Handshake, CalendarCheck } from "lucide-react"
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
+import SEO from "@/components/SEO";
 
 const WHATSAPP_URL =
   "https://wa.me/5511932110460?text=Ol%C3%A1%2C+Dra.+Roberta%21+Gostaria+de+agendar+uma+consulta.+Vi+seu+perfil+no+site+e+me+interessei+muito.+Pode+me+ajudar%3F";
@@ -47,6 +48,11 @@ const contactItems = [
 
 const Contato = () => (
   <div className="min-h-screen bg-background">
+    <SEO
+      title="Contato | RP Golden Clinic"
+      description="Agende sua consulta com a Dra. Roberta Castro, CRM 160891, dermatologista em São Paulo. Atendimento em Chácara Santo Antônio via WhatsApp ou formulário."
+      path="/contato"
+    />
     <Navbar />
 
     <section className="pt-28 pb-20 px-6">

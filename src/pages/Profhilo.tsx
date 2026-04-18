@@ -4,6 +4,7 @@ import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
+import SEO, { medicalProcedureSchema } from "@/components/SEO";
 import profhiloHero from "@/assets/profhilo-hero.jpg";
 
 const WHATSAPP_URL =
@@ -40,12 +41,24 @@ const Profhilo = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Profhilo em São Paulo | Biorremodelador Tecidual na RP Golden Clinic"
+        description="Aplicação de Profhilo com a Dra. Roberta Castro, CRM 160891, em São Paulo. Biorremodelador injetável com ácido hialurônico puro para hidratação profunda, firmeza e estímulo de colágeno. Protocolo em 2-3 sessões."
+        path="/tratamentos/profhilo"
+        schema={medicalProcedureSchema({
+          name: "Profhilo (Biorremodelador Tecidual)",
+          description: "Aplicação injetável de ácido hialurônico puro estabilizado (Profhilo) para biorremodelação tecidual, hidratação profunda e estímulo de colágeno e elastina.",
+          path: "/tratamentos/profhilo",
+          bodyLocation: "rosto, pescoço, colo, mãos, abdômen",
+          preparation: "Protocolo de 2 a 3 sessões com intervalo de 30 dias entre cada aplicação.",
+        })}
+      />
       <Navbar />
 
       {/* Hero */}
       <section className="relative h-[70vh] min-h-[500px] flex items-center">
         <div className="absolute inset-0">
-          <img src={profhiloHero} alt="Profhilo - Biorremodelador Tecidual" className="w-full h-full object-cover" />
+          <img src={profhiloHero} alt="Profhilo biorremodelador em São Paulo - RP Golden Clinic" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/60 to-transparent" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { supabase } from "@/lib/supabase";
 
 export default function PoliticaPrivacidade() {
@@ -42,6 +43,11 @@ export default function PoliticaPrivacidade() {
 
   return (
     <div className="min-h-screen bg-[#faf7f4]">
+      <SEO
+        title="Política de Privacidade | RP Golden Clinic"
+        description="Política de Privacidade da RP Golden Clinic - Dra. Roberta Castro. Como coletamos, usamos e protegemos seus dados conforme a LGPD."
+        path="/politica-de-privacidade"
+      />
       <Navbar />
       <div className="pt-20">
         <article className="max-w-3xl mx-auto px-6 py-16">

@@ -5,6 +5,7 @@ import { Calendar, Clock, ArrowLeft, Share2, Link2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 interface Article {
   id: string;
@@ -143,6 +144,30 @@ export default function BlogArticle() {
 
   return (
     <div className="min-h-screen bg-[#faf7f4]">
+      <SEO
+        title={article.title}
+        description={article.meta_description || article.excerpt}
+        path={`/blog/${article.slug}`}
+        image={article.image_url || undefined}
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: article.title,
+          description: article.meta_description || article.excerpt,
+          image: article.image_url || undefined,
+          datePublished: article.created_at,
+          author: {
+            "@type": "Physician",
+            name: article.author || "Dra. Roberta Castro Peres",
+            identifier: "CRM 160891",
+          },
+          publisher: {
+            "@type": "Organization",
+            name: "RP Golden Clinic",
+            logo: { "@type": "ImageObject", url: "https://rp-golden-clinic.pages.dev/logo-rp.png" },
+          },
+        }}
+      />
       <Navbar />
       <div className="pt-20">
         {/* Hero Image */}

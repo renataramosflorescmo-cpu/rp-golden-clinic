@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
+import SEO, { medicalProcedureSchema } from "@/components/SEO";
 import { Sparkles, Droplets, Sun, Hand, Eye, Heart } from "lucide-react";
 import pdrnHero from "@/assets/pdrn-hero.jpg";
 
@@ -34,12 +35,24 @@ const faqs = [
 const PDRN = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="PDRN (Polinucleotídeos) em São Paulo | RP Golden Clinic"
+        description="Tratamento com PDRN (polinucleotídeos) pela Dra. Roberta Castro, CRM 160891, em São Paulo. Regeneração celular, estímulo de colágeno, clareamento de manchas e revitalização da pele."
+        path="/tratamentos/pdrn"
+        schema={medicalProcedureSchema({
+          name: "PDRN (Polinucleotídeos)",
+          description: "Aplicação injetável de polinucleotídeos (PDRN) para regeneração tecidual, estímulo de colágeno, hidratação profunda e clareamento de manchas.",
+          path: "/tratamentos/pdrn",
+          bodyLocation: "rosto, pálpebras, pescoço, colo, mãos",
+          preparation: "Protocolo de 3 a 5 sessões conforme indicação.",
+        })}
+      />
       <Navbar />
 
       {/* Hero */}
       <section id="inicio" className="relative min-h-[70vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={pdrnHero} alt="Tratamento PDRN" className="w-full h-full object-cover object-top" />
+          <img src={pdrnHero} alt="Tratamento PDRN em São Paulo - RP Golden Clinic" className="w-full h-full object-cover object-top" />
           <div className="absolute inset-0 bg-gradient-to-r from-foreground/70 via-foreground/40 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 to-transparent" />
         </div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
+import SEO, { medicalProcedureSchema } from "@/components/SEO";
 import heroImg from "@/assets/bioestimuladores-hero.jpg";
 
 const WHATSAPP_URL =
@@ -41,12 +42,23 @@ const BioestimuladorColageno = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Bioestimulador de Colágeno em São Paulo | RP Golden Clinic"
+        description="Bioestimuladores de colágeno (Sculptra, Radiesse) com a Dra. Roberta Castro, CRM 160891, em São Paulo. Estimula colágeno natural, combate flacidez facial e corporal. Resultados de 12 a 24 meses."
+        path="/tratamentos/bioestimuladores-colageno"
+        schema={medicalProcedureSchema({
+          name: "Bioestimulador de Colágeno",
+          description: "Aplicação injetável de bioestimuladores (Sculptra, Radiesse) para estimular a produção natural de colágeno e tratar flacidez facial e corporal.",
+          path: "/tratamentos/bioestimuladores-colageno",
+          bodyLocation: "rosto, pescoço, colo, braços, abdômen, coxas, glúteos",
+        })}
+      />
       <Navbar />
 
       {/* Hero */}
       <section className="relative h-[70vh] min-h-[500px] flex items-center">
         <div className="absolute inset-0">
-          <img src={heroImg} alt="Bioestimuladores de Colágeno" className="w-full h-full object-cover" />
+          <img src={heroImg} alt="Bioestimulador de Colágeno em São Paulo - RP Golden Clinic" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/60 to-transparent" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">

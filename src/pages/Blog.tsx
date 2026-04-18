@@ -5,6 +5,7 @@ import { Calendar, Clock, ArrowRight, Search } from "lucide-react";
 import { supabase, getImageUrl } from "@/lib/supabase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 interface Article {
   id: string;
@@ -71,6 +72,23 @@ export default function Blog() {
 
   return (
     <div className="min-h-screen bg-[#faf7f4]">
+      <SEO
+        title="Blog de Dermatologia Estética | RP Golden Clinic"
+        description="Artigos sobre dermatologia estética, cuidados com a pele, tratamentos faciais e corporais pela Dra. Roberta Castro, CRM 160891. Conteúdo curado para você cuidar da sua pele com ciência."
+        path="/blog"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Blog",
+          name: "Blog RP Golden Clinic",
+          description: "Artigos de dermatologia estética pela Dra. Roberta Castro Peres",
+          url: "https://rp-golden-clinic.pages.dev/blog",
+          author: {
+            "@type": "Physician",
+            name: "Dra. Roberta Castro Peres",
+            identifier: "CRM 160891",
+          },
+        }}
+      />
       <Navbar />
       <div className="pt-20">
         {/* Hero */}
@@ -82,7 +100,7 @@ export default function Blog() {
                 Artigos & Conhecimento
               </p>
               <h1 className="font-display text-4xl md:text-6xl font-semibold leading-tight mb-4">
-                Nossa <em className="text-[#c9a96e]">Curadoria</em><br />de Conteudo
+                Nossa <em className="text-[#c9a96e]">Curadoria</em><br />de Conteúdo
               </h1>
               <p className="font-body text-base font-light text-primary-foreground/60 max-w-lg mx-auto">
                 Por Dra. Roberta Castro Peres - CRM 160891

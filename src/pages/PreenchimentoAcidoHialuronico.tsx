@@ -4,6 +4,7 @@ import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
+import SEO, { medicalProcedureSchema } from "@/components/SEO";
 import heroImg from "@/assets/preenchimento-hero.jpg";
 
 const WHATSAPP_URL =
@@ -36,12 +37,23 @@ const PreenchimentoAcidoHialuronico = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Preenchimento com Ácido Hialurônico em São Paulo | RP Golden Clinic"
+        description="Preenchimento facial e corporal com ácido hialurônico pela Dra. Roberta Castro, CRM 160891, em São Paulo. Restaura volume, suaviza rugas e hidrata profundamente. Resultados de 6 a 18 meses."
+        path="/tratamentos/preenchimento-acido-hialuronico"
+        schema={medicalProcedureSchema({
+          name: "Preenchimento com Ácido Hialurônico",
+          description: "Aplicação injetável de ácido hialurônico para restaurar volume facial, suavizar rugas, hidratar profundamente a pele e remodelar glúteos em combinação com bioestimuladores.",
+          path: "/tratamentos/preenchimento-acido-hialuronico",
+          bodyLocation: "rosto, lábios, maçãs do rosto, olheiras, glúteos",
+        })}
+      />
       <Navbar />
 
       {/* Hero */}
       <section className="relative h-[70vh] min-h-[500px] flex items-center">
         <div className="absolute inset-0">
-          <img src={heroImg} alt="Preenchimento com Ácido Hialurônico" className="w-full h-full object-cover" />
+          <img src={heroImg} alt="Preenchimento com Ácido Hialurônico em São Paulo - RP Golden Clinic" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/60 to-transparent" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
