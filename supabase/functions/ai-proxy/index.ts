@@ -19,8 +19,8 @@ interface ProxyRequest {
 
 const CLAUDE_ENDPOINT = "https://api.anthropic.com/v1/messages";
 const GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
-const GEMINI_IMAGE_MODEL = "gemini-2.0-flash-preview-image-generation";
-const GEMINI_VEO_MODEL = "veo-2.0-generate-001";
+const GEMINI_IMAGE_MODEL = "gemini-2.5-flash-image";
+const GEMINI_VEO_MODEL = "veo-3.0-generate-001";
 const CLAUDE_MODEL = "claude-sonnet-4-6";
 
 async function callClaude(body: Record<string, unknown>) {
@@ -60,9 +60,27 @@ async function callGemini(model: string, body: Record<string, unknown>, action: 
   return new Response(text, { status: res.status, headers: { "Content-Type": "application/json" } });
 }
 
+function decodeJwtRole(authHeader: string | null): string | null {
+  if (!authHeader?.startsWith("Bearer ")) return null;
+  const token = authHeader.slice(7);
+  const parts = token.split(".");
+  if (parts.length !== 3) return null;
+  try {
+    const payload = JSON.parse(atob(parts[1].replace(/-/g, "+").replace(/_/g, "/")));
+    return payload.role ?? null;
+  } catch {
+    return null;
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: CORS_HEADERS });
   if (req.method !== "POST") return new Response("Method not allowed", { status: 405, headers: CORS_HEADERS });
+
+  const role = decodeJwtRole(req.headers.get("authorization"));
+  if (role !== "authenticated") {
+    return new Response(JSON.stringify({ error: "Authenticated user required" }), { status: 403, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } });
+  }
 
   let payload: ProxyRequest;
   try {
